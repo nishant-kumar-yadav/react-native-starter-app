@@ -1,9 +1,12 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
-import { RunAnywhere } from '@runanywhere/core';
+import { RunAnywhere, ModelCategory } from '@runanywhere/core';
+import { LlamaCPP } from '@runanywhere/llamacpp';
+import { ONNX, ModelArtifactType } from '@runanywhere/onnx';
 
-// Model IDs - using officially supported models
+// Model IDs - matching sample app model registry
+// See: /Users/shubhammalhotra/Desktop/test-fresh/runanywhere-sdks/examples/react-native/RunAnywhereAI/App.tsx
 const MODEL_IDS = {
-  llm: 'smollm2-360m-instruct-q8_0',
+  llm: 'lfm2-350m-q8_0', // LiquidAI LFM2 - fast and efficient
   stt: 'sherpa-onnx-whisper-tiny.en',
   tts: 'vits-piper-en_US-lessac-medium',
 } as const;
@@ -74,12 +77,11 @@ export const ModelServiceProvider: React.FC<ModelServiceProviderProps> = ({ chil
   
   const isVoiceAgentReady = isLLMLoaded && isSTTLoaded && isTTSLoaded;
   
-  // Check if model is downloaded
-  const isModelDownloaded = useCallback(async (modelId: string): Promise<boolean> => {
+  // Check if model is downloaded (per docs: use getModelInfo and check localPath)
+  const checkModelDownloaded = useCallback(async (modelId: string): Promise<boolean> => {
     try {
-      const models = await RunAnywhere.availableModels();
-      const model = models.find(m => m.id === modelId);
-      return !!model?.localPath;
+      const modelInfo = await RunAnywhere.getModelInfo(modelId);
+      return !!modelInfo?.localPath;
     } catch {
       return false;
     }
@@ -90,91 +92,100 @@ export const ModelServiceProvider: React.FC<ModelServiceProviderProps> = ({ chil
     if (isLLMDownloading || isLLMLoading) return;
     
     try {
-      const isDownloaded = await isModelDownloaded(MODEL_IDS.llm);
+      const isDownloaded = await checkModelDownloaded(MODEL_IDS.llm);
       
       if (!isDownloaded) {
         setIsLLMDownloading(true);
         setLLMDownloadProgress(0);
         
-        // Download with progress
+        // Download with progress (per docs: progress.progress is 0-1)
         await RunAnywhere.downloadModel(MODEL_IDS.llm, (progress) => {
-          setLLMDownloadProgress(progress.percentage);
+          setLLMDownloadProgress(progress.progress * 100);
         });
         
         setIsLLMDownloading(false);
       }
       
-      // Load the model
+      // Load the model (per docs: get localPath first, then load)
       setIsLLMLoading(true);
-      await RunAnywhere.loadModel(MODEL_IDS.llm);
-      setIsLLMLoaded(true);
+      const modelInfo = await RunAnywhere.getModelInfo(MODEL_IDS.llm);
+      if (modelInfo?.localPath) {
+        await RunAnywhere.loadModel(modelInfo.localPath);
+        setIsLLMLoaded(true);
+      }
       setIsLLMLoading(false);
     } catch (error) {
       console.error('LLM download/load error:', error);
       setIsLLMDownloading(false);
       setIsLLMLoading(false);
     }
-  }, [isLLMDownloading, isLLMLoading, isModelDownloaded]);
+  }, [isLLMDownloading, isLLMLoading, checkModelDownloaded]);
   
   // Download and load STT
   const downloadAndLoadSTT = useCallback(async () => {
     if (isSTTDownloading || isSTTLoading) return;
     
     try {
-      const isDownloaded = await isModelDownloaded(MODEL_IDS.stt);
+      const isDownloaded = await checkModelDownloaded(MODEL_IDS.stt);
       
       if (!isDownloaded) {
         setIsSTTDownloading(true);
         setSTTDownloadProgress(0);
         
         await RunAnywhere.downloadModel(MODEL_IDS.stt, (progress) => {
-          setSTTDownloadProgress(progress.percentage);
+          setSTTDownloadProgress(progress.progress * 100);
         });
         
         setIsSTTDownloading(false);
       }
       
-      // Load the model
+      // Load the STT model (per docs: loadSTTModel(localPath, 'whisper'))
       setIsSTTLoading(true);
-      await RunAnywhere.loadSTTModel(MODEL_IDS.stt);
-      setIsSTTLoaded(true);
+      const modelInfo = await RunAnywhere.getModelInfo(MODEL_IDS.stt);
+      if (modelInfo?.localPath) {
+        await RunAnywhere.loadSTTModel(modelInfo.localPath, 'whisper');
+        setIsSTTLoaded(true);
+      }
       setIsSTTLoading(false);
     } catch (error) {
       console.error('STT download/load error:', error);
       setIsSTTDownloading(false);
       setIsSTTLoading(false);
     }
-  }, [isSTTDownloading, isSTTLoading, isModelDownloaded]);
+  }, [isSTTDownloading, isSTTLoading, checkModelDownloaded]);
   
   // Download and load TTS
   const downloadAndLoadTTS = useCallback(async () => {
     if (isTTSDownloading || isTTSLoading) return;
     
     try {
-      const isDownloaded = await isModelDownloaded(MODEL_IDS.tts);
+      const isDownloaded = await checkModelDownloaded(MODEL_IDS.tts);
       
       if (!isDownloaded) {
         setIsTTSDownloading(true);
         setTTSDownloadProgress(0);
         
         await RunAnywhere.downloadModel(MODEL_IDS.tts, (progress) => {
-          setTTSDownloadProgress(progress.percentage);
+          setTTSDownloadProgress(progress.progress * 100);
         });
         
         setIsTTSDownloading(false);
       }
       
-      // Load the model
+      // Load the TTS model (per docs: loadTTSModel(localPath, 'piper'))
       setIsTTSLoading(true);
-      await RunAnywhere.loadTTSVoice(MODEL_IDS.tts);
-      setIsTTSLoaded(true);
+      const modelInfo = await RunAnywhere.getModelInfo(MODEL_IDS.tts);
+      if (modelInfo?.localPath) {
+        await RunAnywhere.loadTTSModel(modelInfo.localPath, 'piper');
+        setIsTTSLoaded(true);
+      }
       setIsTTSLoading(false);
     } catch (error) {
       console.error('TTS download/load error:', error);
       setIsTTSDownloading(false);
       setIsTTSLoading(false);
     }
-  }, [isTTSDownloading, isTTSLoading, isModelDownloaded]);
+  }, [isTTSDownloading, isTTSLoading, checkModelDownloaded]);
   
   // Download and load all models
   const downloadAndLoadAllModels = useCallback(async () => {
@@ -190,7 +201,7 @@ export const ModelServiceProvider: React.FC<ModelServiceProviderProps> = ({ chil
     try {
       await RunAnywhere.unloadModel();
       await RunAnywhere.unloadSTTModel();
-      await RunAnywhere.unloadTTSVoice();
+      await RunAnywhere.unloadTTSModel();
       setIsLLMLoaded(false);
       setIsSTTLoaded(false);
       setIsTTSLoaded(false);
@@ -227,26 +238,36 @@ export const ModelServiceProvider: React.FC<ModelServiceProviderProps> = ({ chil
   );
 };
 
-// Function to register default models
+/**
+ * Register default models with the SDK
+ * Models match the sample app: /Users/shubhammalhotra/Desktop/test-fresh/runanywhere-sdks/examples/react-native/RunAnywhereAI/App.tsx
+ */
 export const registerDefaultModels = async () => {
-  const { LlamaCPP } = await import('@runanywhere/llamacpp');
-  const { ONNX } = await import('@runanywhere/onnx');
-  const { ModelCategory } = await import('@runanywhere/core');
-  
-  // LLM Model - SmolLM2 360M (small, fast, good for demos)
+  // LLM Model - LiquidAI LFM2 350M (fast, efficient, great for mobile)
   await LlamaCPP.addModel({
     id: MODEL_IDS.llm,
-    name: 'SmolLM2 360M Instruct Q8_0',
-    url: 'https://huggingface.co/HuggingFaceTB/SmolLM2-360M-Instruct-GGUF/resolve/main/smollm2-360m-instruct-q8_0.gguf',
-    memoryRequirement: 400000000, // ~400MB
+    name: 'LiquidAI LFM2 350M Q8_0',
+    url: 'https://huggingface.co/LiquidAI/LFM2-350M-GGUF/resolve/main/LFM2-350M-Q8_0.gguf',
+    memoryRequirement: 400_000_000,
   });
   
-  // STT Model - Whisper Tiny English (fast transcription)
+  // Also add SmolLM2 as alternative smaller model
+  await LlamaCPP.addModel({
+    id: 'smollm2-360m-q8_0',
+    name: 'SmolLM2 360M Q8_0',
+    url: 'https://huggingface.co/prithivMLmods/SmolLM2-360M-GGUF/resolve/main/SmolLM2-360M.Q8_0.gguf',
+    memoryRequirement: 500_000_000,
+  });
+  
+  // STT Model - Sherpa Whisper Tiny English
+  // Using tar.gz from RunanywhereAI/sherpa-onnx for fast native extraction
   await ONNX.addModel({
     id: MODEL_IDS.stt,
     name: 'Sherpa Whisper Tiny (ONNX)',
     url: 'https://github.com/RunanywhereAI/sherpa-onnx/releases/download/runanywhere-models-v1/sherpa-onnx-whisper-tiny.en.tar.gz',
     modality: ModelCategory.SpeechRecognition,
+    artifactType: ModelArtifactType.TarGzArchive,
+    memoryRequirement: 75_000_000,
   });
   
   // TTS Model - Piper TTS (US English - Medium quality)
@@ -255,5 +276,7 @@ export const registerDefaultModels = async () => {
     name: 'Piper TTS (US English - Medium)',
     url: 'https://github.com/RunanywhereAI/sherpa-onnx/releases/download/runanywhere-models-v1/vits-piper-en_US-lessac-medium.tar.gz',
     modality: ModelCategory.SpeechSynthesis,
+    artifactType: ModelArtifactType.TarGzArchive,
+    memoryRequirement: 65_000_000,
   });
 };

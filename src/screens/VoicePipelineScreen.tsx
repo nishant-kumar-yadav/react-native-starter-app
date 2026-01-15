@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import {
   View,
   Text,
@@ -7,7 +7,9 @@ import {
   StyleSheet,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { RunAnywhere } from '@runanywhere/core';
+import RNFS from 'react-native-fs';
+import Sound from 'react-native-sound';
+import { RunAnywhere, VoiceSessionEvent, VoiceSessionHandle } from '@runanywhere/core';
 import { AppColors } from '../theme';
 import { useModelService } from '../services/ModelService';
 import { ModelLoaderWidget, AudioVisualizer } from '../components';
@@ -18,47 +20,217 @@ interface ConversationMessage {
   timestamp: Date;
 }
 
+// Model IDs - must match those registered in ModelService
+const MODEL_IDS = {
+  llm: 'lfm2-350m-q8_0',
+  stt: 'sherpa-onnx-whisper-tiny.en',
+  tts: 'vits-piper-en_US-lessac-medium',
+};
+
 export const VoicePipelineScreen: React.FC = () => {
   const modelService = useModelService();
   const [isActive, setIsActive] = useState(false);
   const [status, setStatus] = useState<string>('Ready');
   const [conversation, setConversation] = useState<ConversationMessage[]>([]);
   const [audioLevel, setAudioLevel] = useState(0);
+  
+  // Refs for session and audio
+  const sessionRef = useRef<VoiceSessionHandle | null>(null);
+  const currentSoundRef = useRef<Sound | null>(null);
 
-  const startVoiceAgent = async () => {
-    setIsActive(true);
-    setStatus('Listening...');
-
-    try {
-      // Start voice agent
-      const agent = await RunAnywhere.startVoiceAgent({
-        onTranscription: (text: string) => {
-          setStatus('Thinking...');
+  // Handle voice session events per docs:
+  // https://docs.runanywhere.ai/react-native/voice-agent#voicesessionevent
+  const handleVoiceEvent = useCallback((event: VoiceSessionEvent) => {
+    switch (event.type) {
+      case 'sessionStarted':
+        setStatus('Listening...');
+        setAudioLevel(0.2);
+        break;
+        
+      case 'listeningStarted':
+        setStatus('Listening...');
+        setAudioLevel(0.3);
+        break;
+        
+      case 'speechDetected':
+        setStatus('Hearing you...');
+        setAudioLevel(0.7);
+        break;
+        
+      case 'speechEnded':
+        setAudioLevel(0.1);
+        break;
+        
+      case 'transcribing':
+        setStatus('Processing speech...');
+        setAudioLevel(0.4);
+        break;
+        
+      case 'transcriptionComplete':
+        if (event.data?.transcript) {
           const userMessage: ConversationMessage = {
             role: 'user',
-            text,
+            text: event.data.transcript,
             timestamp: new Date(),
           };
           setConversation(prev => [...prev, userMessage]);
-        },
-        onResponse: (text: string) => {
-          setStatus('Speaking...');
+        }
+        setStatus('Thinking...');
+        setAudioLevel(0.5);
+        break;
+        
+      case 'generating':
+        setStatus('Generating response...');
+        setAudioLevel(0.5);
+        break;
+        
+      case 'generationComplete':
+        if (event.data?.response) {
           const assistantMessage: ConversationMessage = {
             role: 'assistant',
-            text,
+            text: event.data.response,
             timestamp: new Date(),
           };
           setConversation(prev => [...prev, assistantMessage]);
-        },
-        onAudioLevel: (level: number) => {
-          setAudioLevel(level);
-        },
-        onComplete: () => {
-          setStatus('Listening...');
-        },
-      });
+        }
+        setStatus('Synthesizing...');
+        setAudioLevel(0.6);
+        break;
+        
+      case 'synthesizing':
+        setStatus('Preparing voice...');
+        break;
+        
+      case 'synthesisComplete':
+        setStatus('Speaking...');
+        // Play audio if provided
+        if (event.data?.audio) {
+          playResponseAudio(event.data.audio);
+        }
+        break;
+        
+      case 'speaking':
+        setStatus('Speaking...');
+        setAudioLevel(0.8);
+        break;
+        
+      case 'turnComplete':
+        setStatus('Listening...');
+        setAudioLevel(0.3);
+        break;
+        
+      case 'error':
+        setStatus(`Error: ${event.data?.error || 'Unknown error'}`);
+        setAudioLevel(0);
+        console.error('Voice session error:', event.data?.error);
+        break;
+    }
+  }, []);
 
-      // Agent runs until stopped
+  // Play synthesized audio response
+  const playResponseAudio = async (base64Audio: string) => {
+    try {
+      // Convert base64 float32 PCM to WAV and save
+      const wavData = createWavFromBase64Float32(base64Audio, 22050); // Piper uses 22050 Hz
+      const tempPath = `${RNFS.TemporaryDirectoryPath}/voice_response_${Date.now()}.wav`;
+      await RNFS.writeFile(tempPath, wavData, 'base64');
+
+      // Play the audio
+      const sound = new Sound(tempPath, '', (error) => {
+        if (error) {
+          console.error('Failed to load sound:', error);
+          return;
+        }
+        
+        currentSoundRef.current = sound;
+        setAudioLevel(0.8);
+        
+        sound.play((success) => {
+          sound.release();
+          currentSoundRef.current = null;
+          setAudioLevel(0.3);
+        });
+      });
+    } catch (error) {
+      console.error('Error playing audio:', error);
+    }
+  };
+
+  // Convert base64 float32 PCM to WAV format
+  const createWavFromBase64Float32 = (base64Audio: string, sampleRate: number): string => {
+    const binaryStr = atob(base64Audio);
+    const bytes = new Uint8Array(binaryStr.length);
+    for (let i = 0; i < binaryStr.length; i++) {
+      bytes[i] = binaryStr.charCodeAt(i);
+    }
+    const float32Samples = new Float32Array(bytes.buffer);
+    const numSamples = float32Samples.length;
+
+    const wavBuffer = new ArrayBuffer(44 + numSamples * 2);
+    const view = new DataView(wavBuffer);
+
+    // WAV header
+    const writeString = (offset: number, str: string) => {
+      for (let i = 0; i < str.length; i++) {
+        view.setUint8(offset + i, str.charCodeAt(i));
+      }
+    };
+
+    writeString(0, 'RIFF');
+    view.setUint32(4, 36 + numSamples * 2, true);
+    writeString(8, 'WAVE');
+    writeString(12, 'fmt ');
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true);
+    view.setUint16(22, 1, true);
+    view.setUint32(24, sampleRate, true);
+    view.setUint32(28, sampleRate * 2, true);
+    view.setUint16(32, 2, true);
+    view.setUint16(34, 16, true);
+    writeString(36, 'data');
+    view.setUint32(40, numSamples * 2, true);
+
+    let offset = 44;
+    for (let i = 0; i < float32Samples.length; i++) {
+      const s = Math.max(-1, Math.min(1, float32Samples[i]));
+      view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
+      offset += 2;
+    }
+
+    const uint8Array = new Uint8Array(wavBuffer);
+    let result = '';
+    for (let i = 0; i < uint8Array.length; i++) {
+      result += String.fromCharCode(uint8Array[i]);
+    }
+    return btoa(result);
+  };
+
+  // Start voice session per docs:
+  // https://docs.runanywhere.ai/react-native/voice-agent#startvoicesession
+  const startVoiceAgent = async () => {
+    setIsActive(true);
+    setStatus('Starting...');
+
+    try {
+      // Per docs: Use startVoiceSession with VoiceSessionConfig and callback
+      sessionRef.current = await RunAnywhere.startVoiceSession(
+        {
+          agentConfig: {
+            llmModelId: MODEL_IDS.llm,
+            sttModelId: MODEL_IDS.stt,
+            ttsModelId: MODEL_IDS.tts,
+            systemPrompt: 'You are a helpful, friendly voice assistant. Keep your responses brief and conversational.',
+            generationOptions: {
+              maxTokens: 150,
+              temperature: 0.7,
+            },
+          },
+          enableVAD: true,
+          vadSensitivity: 0.5,
+          speechTimeout: 3000, // 3 seconds timeout for speech
+        },
+        handleVoiceEvent
+      );
     } catch (error) {
       console.error('Voice agent error:', error);
       setStatus(`Error: ${error}`);
@@ -68,7 +240,20 @@ export const VoicePipelineScreen: React.FC = () => {
 
   const stopVoiceAgent = async () => {
     try {
-      await RunAnywhere.stopVoiceAgent();
+      // Stop any playing audio
+      if (currentSoundRef.current) {
+        currentSoundRef.current.stop(() => {
+          currentSoundRef.current?.release();
+          currentSoundRef.current = null;
+        });
+      }
+      
+      // Stop the voice session
+      if (sessionRef.current) {
+        await sessionRef.current.stop();
+        sessionRef.current = null;
+      }
+      
       setIsActive(false);
       setStatus('Ready');
       setAudioLevel(0);
@@ -179,19 +364,19 @@ export const VoicePipelineScreen: React.FC = () => {
             <Text style={styles.infoTitle}>How it works:</Text>
             <View style={styles.infoStep}>
               <Text style={styles.stepNumber}>1️⃣</Text>
-              <Text style={styles.stepText}>Speak your question</Text>
+              <Text style={styles.stepText}>Voice Activity Detection (VAD) listens for speech</Text>
             </View>
             <View style={styles.infoStep}>
               <Text style={styles.stepNumber}>2️⃣</Text>
-              <Text style={styles.stepText}>Speech is transcribed (STT)</Text>
+              <Text style={styles.stepText}>Speech is transcribed (STT with Whisper)</Text>
             </View>
             <View style={styles.infoStep}>
               <Text style={styles.stepNumber}>3️⃣</Text>
-              <Text style={styles.stepText}>AI generates response (LLM)</Text>
+              <Text style={styles.stepText}>AI generates response (LLM with SmolLM2)</Text>
             </View>
             <View style={styles.infoStep}>
               <Text style={styles.stepNumber}>4️⃣</Text>
-              <Text style={styles.stepText}>Response is spoken (TTS)</Text>
+              <Text style={styles.stepText}>Response is spoken (TTS with Piper)</Text>
             </View>
           </View>
         )}

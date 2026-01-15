@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -6,14 +6,17 @@ import {
   TouchableOpacity,
   ScrollView,
   StyleSheet,
+  NativeModules,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import Sound from 'react-native-sound';
 import RNFS from 'react-native-fs';
 import { RunAnywhere } from '@runanywhere/core';
 import { AppColors } from '../theme';
 import { useModelService } from '../services/ModelService';
 import { ModelLoaderWidget } from '../components';
+
+// Native Audio Module for better audio session management
+const { NativeAudioModule } = NativeModules;
 
 const SAMPLE_TEXTS = [
   'Hello! Welcome to RunAnywhere. Experience the power of on-device AI.',
@@ -28,7 +31,16 @@ export const TextToSpeechScreen: React.FC = () => {
   const [isSynthesizing, setIsSynthesizing] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [speechRate, setSpeechRate] = useState(1.0);
-  const [currentSound, setCurrentSound] = useState<Sound | null>(null);
+  const [currentAudioPath, setCurrentAudioPath] = useState<string | null>(null);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (NativeAudioModule && isPlaying) {
+        NativeAudioModule.stopPlayback().catch(() => {});
+      }
+    };
+  }, [isPlaying]);
 
   const synthesizeAndPlay = async () => {
     if (!text.trim()) {
@@ -38,81 +50,129 @@ export const TextToSpeechScreen: React.FC = () => {
     setIsSynthesizing(true);
 
     try {
-      // Synthesize speech
-      const result = await RunAnywhere.synthesize(text, { rate: speechRate });
+      // Per docs: https://docs.runanywhere.ai/react-native/tts/synthesize
+      // result.audio contains base64-encoded float32 PCM
+      const result = await RunAnywhere.synthesize(text, { 
+        rate: speechRate,
+        pitch: 1.0,
+        volume: 1.0,
+      });
 
-      // Convert Float32Array to WAV
-      const wavData = createWavFromFloat32(result.samples, result.sampleRate);
+      console.log(`[TTS] Synthesized: duration=${result.duration}s, sampleRate=${result.sampleRate}Hz, numSamples=${result.numSamples}`);
+
+      // Convert base64 float32 PCM to WAV
+      const wavData = createWavFromBase64Float32(result.audio, result.sampleRate, result.numSamples);
 
       // Save to temporary file
       const tempPath = `${RNFS.TemporaryDirectoryPath}/tts_output_${Date.now()}.wav`;
       await RNFS.writeFile(tempPath, wavData, 'base64');
 
-      // Play audio
-      const sound = new Sound(tempPath, '', (error) => {
-        if (error) {
-          console.error('Failed to load sound', error);
-          setIsSynthesizing(false);
-          return;
-        }
+      // Verify file was created
+      const exists = await RNFS.exists(tempPath);
+      if (!exists) {
+        throw new Error('Failed to create audio file');
+      }
 
-        setIsSynthesizing(false);
-        setIsPlaying(true);
-        setCurrentSound(sound);
+      const fileInfo = await RNFS.stat(tempPath);
+      console.log(`[TTS] WAV file created: ${tempPath}, size: ${fileInfo.size} bytes`);
 
-        sound.play((success) => {
-          setIsPlaying(false);
-          sound.release();
-          setCurrentSound(null);
-        });
-      });
-    } catch (error) {
-      console.error('TTS error:', error);
+      setCurrentAudioPath(tempPath);
       setIsSynthesizing(false);
-    }
-  };
+      setIsPlaying(true);
 
-  const stopPlayback = () => {
-    if (currentSound) {
-      currentSound.stop(() => {
-        currentSound.release();
-        setCurrentSound(null);
+      // Play using native audio module
+      if (NativeAudioModule) {
+        try {
+          const playResult = await NativeAudioModule.playAudio(tempPath);
+          console.log(`[TTS] Playback started, duration: ${playResult.duration}s`);
+          
+          // Wait for playback to complete (approximate based on duration)
+          setTimeout(() => {
+            setIsPlaying(false);
+            setCurrentAudioPath(null);
+            // Clean up file
+            RNFS.unlink(tempPath).catch(() => {});
+          }, (result.duration + 0.5) * 1000);
+        } catch (playError) {
+          console.error('[TTS] Native playback error:', playError);
+          setIsPlaying(false);
+        }
+      } else {
+        console.error('[TTS] NativeAudioModule not available');
         setIsPlaying(false);
-      });
+      }
+    } catch (error) {
+      console.error('[TTS] Error:', error);
+      setIsSynthesizing(false);
+      setIsPlaying(false);
     }
   };
 
-  const createWavFromFloat32 = (samples: Float32Array, sampleRate: number): string => {
-    // Convert Float32 to Int16 and create WAV file
-    const buffer = new ArrayBuffer(44 + samples.length * 2);
-    const view = new DataView(buffer);
+  const stopPlayback = async () => {
+    if (NativeAudioModule) {
+      try {
+        await NativeAudioModule.stopPlayback();
+      } catch (e) {
+        // Ignore
+      }
+    }
+    setIsPlaying(false);
+    
+    // Clean up file
+    if (currentAudioPath) {
+      RNFS.unlink(currentAudioPath).catch(() => {});
+      setCurrentAudioPath(null);
+    }
+  };
+
+  // Convert base64-encoded float32 PCM to WAV format
+  const createWavFromBase64Float32 = (base64Audio: string, sampleRate: number, numSamples: number): string => {
+    // Decode base64 to get float32 samples
+    const binaryStr = atob(base64Audio);
+    const bytes = new Uint8Array(binaryStr.length);
+    for (let i = 0; i < binaryStr.length; i++) {
+      bytes[i] = binaryStr.charCodeAt(i);
+    }
+    const float32Samples = new Float32Array(bytes.buffer);
+
+    // Use actual sample count from decoded data
+    const actualNumSamples = float32Samples.length;
+    console.log(`[TTS] Converting ${actualNumSamples} float32 samples to WAV (expected: ${numSamples})`);
+
+    // Create WAV buffer (44 byte header + 16-bit PCM data)
+    const wavBuffer = new ArrayBuffer(44 + actualNumSamples * 2);
+    const view = new DataView(wavBuffer);
 
     // WAV header
     writeString(view, 0, 'RIFF');
-    view.setUint32(4, 36 + samples.length * 2, true);
+    view.setUint32(4, 36 + actualNumSamples * 2, true);
     writeString(view, 8, 'WAVE');
     writeString(view, 12, 'fmt ');
-    view.setUint32(16, 16, true);
-    view.setUint16(20, 1, true);
-    view.setUint16(22, 1, true);
+    view.setUint32(16, 16, true); // Subchunk1Size
+    view.setUint16(20, 1, true);  // AudioFormat (PCM)
+    view.setUint16(22, 1, true);  // NumChannels (mono)
     view.setUint32(24, sampleRate, true);
-    view.setUint32(28, sampleRate * 2, true);
-    view.setUint16(32, 2, true);
-    view.setUint16(34, 16, true);
+    view.setUint32(28, sampleRate * 2, true); // ByteRate
+    view.setUint16(32, 2, true);  // BlockAlign
+    view.setUint16(34, 16, true); // BitsPerSample
     writeString(view, 36, 'data');
-    view.setUint32(40, samples.length * 2, true);
+    view.setUint32(40, actualNumSamples * 2, true);
 
-    // Convert samples
+    // Convert float32 samples to int16
     let offset = 44;
-    for (let i = 0; i < samples.length; i++) {
-      const s = Math.max(-1, Math.min(1, samples[i]));
+    for (let i = 0; i < float32Samples.length; i++) {
+      const s = Math.max(-1, Math.min(1, float32Samples[i]));
       view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
       offset += 2;
     }
 
     // Convert to base64
-    const uint8Array = new Uint8Array(buffer);
-    return btoa(String.fromCharCode.apply(null, Array.from(uint8Array)));
+    const uint8Array = new Uint8Array(wavBuffer);
+    let result = '';
+    for (let i = 0; i < uint8Array.length; i++) {
+      result += String.fromCharCode(uint8Array[i]);
+    }
+    return btoa(result);
   };
 
   const writeString = (view: DataView, offset: number, string: string) => {

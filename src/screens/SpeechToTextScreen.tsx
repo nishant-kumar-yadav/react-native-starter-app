@@ -1,19 +1,22 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   ScrollView,
   StyleSheet,
+  NativeModules,
+  Platform,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import AudioRecorderPlayer from 'react-native-audio-recorder-player';
+import RNFS from 'react-native-fs';
 import { RunAnywhere } from '@runanywhere/core';
 import { AppColors } from '../theme';
 import { useModelService } from '../services/ModelService';
 import { ModelLoaderWidget, AudioVisualizer } from '../components';
 
-const audioRecorderPlayer = new AudioRecorderPlayer();
+// Native Audio Module - records in WAV format (16kHz mono) optimal for Whisper STT
+const { NativeAudioModule } = NativeModules;
 
 export const SpeechToTextScreen: React.FC = () => {
   const modelService = useModelService();
@@ -22,61 +25,126 @@ export const SpeechToTextScreen: React.FC = () => {
   const [transcription, setTranscription] = useState('');
   const [transcriptionHistory, setTranscriptionHistory] = useState<string[]>([]);
   const [audioLevel, setAudioLevel] = useState(0);
+  const [recordingDuration, setRecordingDuration] = useState(0);
   const audioPathRef = useRef<string | null>(null);
+  const audioLevelIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const recordingStartRef = useRef<number>(0);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (audioLevelIntervalRef.current) {
+        clearInterval(audioLevelIntervalRef.current);
+      }
+      if (isRecording && NativeAudioModule) {
+        NativeAudioModule.cancelRecording().catch(() => {});
+      }
+    };
+  }, [isRecording]);
 
   const startRecording = async () => {
     try {
-      const path = await audioRecorderPlayer.startRecorder();
-      audioPathRef.current = path;
+      // Check if native module is available
+      if (!NativeAudioModule) {
+        console.error('[STT] NativeAudioModule not available');
+        setTranscription('Error: Native audio module not available. Please rebuild the app.');
+        return;
+      }
+
+      console.log('[STT] Starting recording with native module...');
+      const result = await NativeAudioModule.startRecording();
+      
+      audioPathRef.current = result.path;
+      recordingStartRef.current = Date.now();
       setIsRecording(true);
       setTranscription('');
+      setRecordingDuration(0);
 
-      // Monitor audio levels
-      audioRecorderPlayer.addRecordBackListener((e) => {
-        const level = e.currentMetering ? Math.min(1, Math.max(0, (e.currentMetering + 60) / 60)) : 0;
-        setAudioLevel(level);
-      });
+      // Poll for audio levels
+      audioLevelIntervalRef.current = setInterval(async () => {
+        try {
+          const levelResult = await NativeAudioModule.getAudioLevel();
+          setAudioLevel(levelResult.level || 0);
+          setRecordingDuration(Date.now() - recordingStartRef.current);
+        } catch (e) {
+          // Ignore errors during polling
+        }
+      }, 100);
+
+      console.log('[STT] Recording started at:', result.path);
     } catch (error) {
-      console.error('Recording error:', error);
+      console.error('[STT] Recording error:', error);
+      setTranscription(`Error starting recording: ${error}`);
     }
   };
 
   const stopRecording = async () => {
     try {
-      const result = await audioRecorderPlayer.stopRecorder();
-      audioRecorderPlayer.removeRecordBackListener();
+      // Clear audio level polling
+      if (audioLevelIntervalRef.current) {
+        clearInterval(audioLevelIntervalRef.current);
+        audioLevelIntervalRef.current = null;
+      }
+
+      if (!NativeAudioModule) {
+        throw new Error('NativeAudioModule not available');
+      }
+
+      const result = await NativeAudioModule.stopRecording();
       setIsRecording(false);
       setAudioLevel(0);
       setIsTranscribing(true);
 
-      // Read audio file and transcribe
-      if (audioPathRef.current) {
-        const audioData = await readAudioFile(audioPathRef.current);
-        const text = await RunAnywhere.transcribe(audioData);
-        
-        const finalText = text || '(No speech detected)';
-        setTranscription(finalText);
-        if (text) {
-          setTranscriptionHistory(prev => [text, ...prev]);
-        }
+      const audioPath = result.path;
+      console.log('[STT] Recording stopped, file at:', audioPath, 'size:', result.fileSize);
+
+      if (!audioPath) {
+        throw new Error('Recording path not found');
       }
+
+      // Verify file exists
+      const exists = await RNFS.exists(audioPath);
+      if (!exists) {
+        throw new Error('Recording file not found');
+      }
+
+      // Transcribe the WAV file
+      console.log('[STT] Transcribing file...');
+      const transcribeResult = await RunAnywhere.transcribeFile(audioPath, {
+        language: 'en',
+      });
+
+      const finalText = transcribeResult.text || '(No speech detected)';
+      setTranscription(finalText);
+
+      if (transcribeResult.text) {
+        setTranscriptionHistory(prev => [transcribeResult.text, ...prev]);
+      }
+
+      console.log(`[STT] Transcription: "${finalText}", confidence: ${transcribeResult.confidence}`);
+
+      // Clean up the audio file
+      await RNFS.unlink(audioPath).catch(() => {});
+      audioPathRef.current = null;
+
       setIsTranscribing(false);
     } catch (error) {
-      console.error('Transcription error:', error);
+      console.error('[STT] Transcription error:', error);
       setTranscription(`Error: ${error}`);
       setIsTranscribing(false);
     }
   };
 
-  const readAudioFile = async (path: string): Promise<Uint8Array> => {
-    // Placeholder - would use react-native-fs or similar to read file
-    // For now, return empty array
-    return new Uint8Array();
-  };
-
   const handleClearHistory = () => {
     setTranscriptionHistory([]);
     setTranscription('');
+  };
+
+  const formatDuration = (ms: number): string => {
+    const totalSeconds = Math.floor(ms / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
   if (!modelService.isSTTLoaded) {
@@ -109,7 +177,7 @@ export const SpeechToTextScreen: React.FC = () => {
                 Listening...
               </Text>
               <Text style={styles.statusSubtitle}>
-                Speak clearly into your microphone
+                {formatDuration(recordingDuration)}
               </Text>
             </>
           ) : isTranscribing ? (
@@ -125,7 +193,7 @@ export const SpeechToTextScreen: React.FC = () => {
                 <Text style={styles.micIcon}>🎤</Text>
               </View>
               <Text style={styles.statusTitle}>Tap to Record</Text>
-              <Text style={styles.statusSubtitle}>On-device speech recognition</Text>
+              <Text style={styles.statusSubtitle}>On-device speech recognition (WAV 16kHz)</Text>
             </>
           )}
         </View>

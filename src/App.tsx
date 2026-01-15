@@ -26,12 +26,12 @@ const App: React.FC = () => {
           environment: SDKEnvironment.Development,
         });
 
-        // Register backends
-        const { LlamaCppProvider } = await import('@runanywhere/llamacpp');
-        const { ONNXProvider } = await import('@runanywhere/onnx');
+        // Register backends (per docs: https://docs.runanywhere.ai/react-native/quick-start)
+        const { LlamaCPP } = await import('@runanywhere/llamacpp');
+        const { ONNX } = await import('@runanywhere/onnx');
         
-        await LlamaCppProvider.register();
-        await ONNXProvider.register();
+        LlamaCPP.register();
+        ONNX.register();
 
         // Register default models
         await registerDefaultModels();

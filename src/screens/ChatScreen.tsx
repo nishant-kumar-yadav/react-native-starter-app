@@ -23,6 +23,7 @@ export const ChatScreen: React.FC = () => {
   const [currentResponse, setCurrentResponse] = useState('');
   const flatListRef = useRef<FlatList>(null);
   const streamCancelRef = useRef<(() => void) | null>(null);
+  const responseRef = useRef(''); // Track response for closure
 
   useEffect(() => {
     // Scroll to bottom when messages change
@@ -49,31 +50,35 @@ export const ChatScreen: React.FC = () => {
     setCurrentResponse('');
 
     try {
-      const result = await RunAnywhere.generateStream(text, {
+      // Per docs: https://docs.runanywhere.ai/react-native/quick-start#6-stream-responses
+      const streamResult = await RunAnywhere.generateStream(text, {
         maxTokens: 256,
         temperature: 0.8,
       });
 
-      streamCancelRef.current = result.cancel;
+      streamCancelRef.current = streamResult.cancel;
+      responseRef.current = '';
 
-      // Stream tokens
-      for await (const token of result.stream) {
-        setCurrentResponse(prev => prev + token);
+      // Stream tokens as they arrive
+      for await (const token of streamResult.stream) {
+        responseRef.current += token;
+        setCurrentResponse(responseRef.current);
       }
 
-      // Get final result
-      const finalResult = await result.result;
+      // Get final metrics
+      const finalResult = await streamResult.result;
 
-      // Add assistant message
+      // Add assistant message (use ref to get final text due to closure)
       const assistantMessage: ChatMessage = {
-        text: currentResponse,
+        text: responseRef.current,
         isUser: false,
         timestamp: new Date(),
-        tokensPerSecond: finalResult.tokensPerSecond,
-        totalTokens: finalResult.tokensUsed,
+        tokensPerSecond: finalResult.performanceMetrics?.tokensPerSecond,
+        totalTokens: finalResult.performanceMetrics?.totalTokens,
       };
       setMessages(prev => [...prev, assistantMessage]);
       setCurrentResponse('');
+      responseRef.current = '';
       setIsGenerating(false);
     } catch (error) {
       const errorMessage: ChatMessage = {
@@ -91,9 +96,9 @@ export const ChatScreen: React.FC = () => {
   const handleStop = () => {
     if (streamCancelRef.current) {
       streamCancelRef.current();
-      if (currentResponse) {
+      if (responseRef.current) {
         const message: ChatMessage = {
-          text: currentResponse,
+          text: responseRef.current,
           isUser: false,
           timestamp: new Date(),
           wasCancelled: true,
@@ -101,6 +106,7 @@ export const ChatScreen: React.FC = () => {
         setMessages(prev => [...prev, message]);
       }
       setCurrentResponse('');
+      responseRef.current = '';
       setIsGenerating(false);
     }
   };

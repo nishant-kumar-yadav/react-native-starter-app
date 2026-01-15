@@ -15,6 +15,8 @@
 		7699B88040F8A987B510C191 /* libPods-RunAnywhereStarter-RunAnywhereStarterTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-RunAnywhereStarter-RunAnywhereStarterTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		95FAA6247F992A3A1B818127 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
+		NATIVE_AUDIO_SWIFT /* NativeAudioModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = NATIVE_AUDIO_SWIFT_REF /* NativeAudioModule.swift */; };
+		NATIVE_AUDIO_OBJC /* NativeAudioModule.m in Sources */ = {isa = PBXBuildFile; fileRef = NATIVE_AUDIO_OBJC_REF /* NativeAudioModule.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +48,9 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = RunAnywhereStarter/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-RunAnywhereStarter-RunAnywhereStarterTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunAnywhereStarter-RunAnywhereStarterTests.release.xcconfig"; path = "Target Support Files/Pods-RunAnywhereStarter-RunAnywhereStarterTests/Pods-RunAnywhereStarter-RunAnywhereStarterTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		NATIVE_AUDIO_SWIFT_REF /* NativeAudioModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NativeAudioModule.swift; path = RunAnywhereStarter/NativeAudioModule.swift; sourceTree = "<group>"; };
+		NATIVE_AUDIO_OBJC_REF /* NativeAudioModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NativeAudioModule.m; path = RunAnywhereStarter/NativeAudioModule.m; sourceTree = "<group>"; };
+		BRIDGING_HEADER_REF /* RunAnywhereStarter-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RunAnywhereStarter-Bridging-Header.h"; path = "RunAnywhereStarter/RunAnywhereStarter-Bridging-Header.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +100,9 @@
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */,
+				NATIVE_AUDIO_SWIFT_REF /* NativeAudioModule.swift */,
+				NATIVE_AUDIO_OBJC_REF /* NativeAudioModule.m */,
+				BRIDGING_HEADER_REF /* RunAnywhereStarter-Bridging-Header.h */,
 			);
 			name = RunAnywhereStarter;
 			sourceTree = "<group>";
@@ -398,6 +406,8 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				NATIVE_AUDIO_SWIFT /* NativeAudioModule.swift in Sources */,
+				NATIVE_AUDIO_OBJC /* NativeAudioModule.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -486,6 +496,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = RunAnywhereStarter;
+				SWIFT_OBJC_BRIDGING_HEADER = "RunAnywhereStarter/RunAnywhereStarter-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -514,6 +525,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = RunAnywhereStarter;
+				SWIFT_OBJC_BRIDGING_HEADER = "RunAnywhereStarter/RunAnywhereStarter-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
