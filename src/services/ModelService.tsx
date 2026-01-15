@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
-import RunAnywhere from '@runanywhere/core';
+import { RunAnywhere } from '@runanywhere/core';
 
 // Model IDs - using officially supported models
 const MODEL_IDS = {
@@ -229,11 +229,12 @@ export const ModelServiceProvider: React.FC<ModelServiceProviderProps> = ({ chil
 
 // Function to register default models
 export const registerDefaultModels = async () => {
-  const { LlamaCpp } = await import('@runanywhere/llamacpp');
-  const { Onnx, ModelCategory } = await import('@runanywhere/onnx');
+  const { LlamaCPP } = await import('@runanywhere/llamacpp');
+  const { ONNX } = await import('@runanywhere/onnx');
+  const { ModelCategory } = await import('@runanywhere/core');
   
   // LLM Model - SmolLM2 360M (small, fast, good for demos)
-  await LlamaCpp.addModel({
+  await LlamaCPP.addModel({
     id: MODEL_IDS.llm,
     name: 'SmolLM2 360M Instruct Q8_0',
     url: 'https://huggingface.co/HuggingFaceTB/SmolLM2-360M-Instruct-GGUF/resolve/main/smollm2-360m-instruct-q8_0.gguf',
@@ -241,18 +242,18 @@ export const registerDefaultModels = async () => {
   });
   
   // STT Model - Whisper Tiny English (fast transcription)
-  await Onnx.addModel({
+  await ONNX.addModel({
     id: MODEL_IDS.stt,
     name: 'Sherpa Whisper Tiny (ONNX)',
     url: 'https://github.com/RunanywhereAI/sherpa-onnx/releases/download/runanywhere-models-v1/sherpa-onnx-whisper-tiny.en.tar.gz',
-    modality: ModelCategory.speechRecognition,
+    modality: ModelCategory.SpeechRecognition,
   });
   
   // TTS Model - Piper TTS (US English - Medium quality)
-  await Onnx.addModel({
+  await ONNX.addModel({
     id: MODEL_IDS.tts,
     name: 'Piper TTS (US English - Medium)',
     url: 'https://github.com/RunanywhereAI/sherpa-onnx/releases/download/runanywhere-models-v1/vits-piper-en_US-lessac-medium.tar.gz',
-    modality: ModelCategory.speechSynthesis,
+    modality: ModelCategory.SpeechSynthesis,
   });
 };

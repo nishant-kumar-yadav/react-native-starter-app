@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'react-native';
-import RunAnywhere from '@runanywhere/core';
+import { RunAnywhere, SDKEnvironment } from '@runanywhere/core';
 import { ModelServiceProvider, registerDefaultModels } from './services/ModelService';
 import { AppColors } from './theme';
 import {
@@ -21,15 +21,17 @@ const App: React.FC = () => {
     // Initialize SDK
     const initializeSDK = async () => {
       try {
-        // Initialize RunAnywhere SDK
-        await RunAnywhere.initialize();
+        // Initialize RunAnywhere SDK (Development mode doesn't require API key)
+        await RunAnywhere.initialize({
+          environment: SDKEnvironment.Development,
+        });
 
         // Register backends
-        const { LlamaCpp } = await import('@runanywhere/llamacpp');
-        const { Onnx } = await import('@runanywhere/onnx');
+        const { LlamaCppProvider } = await import('@runanywhere/llamacpp');
+        const { ONNXProvider } = await import('@runanywhere/onnx');
         
-        await LlamaCpp.register();
-        await Onnx.register();
+        await LlamaCppProvider.register();
+        await ONNXProvider.register();
 
         // Register default models
         await registerDefaultModels();
