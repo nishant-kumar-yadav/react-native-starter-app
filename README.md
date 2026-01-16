@@ -2,8 +2,8 @@
 
 A comprehensive starter app demonstrating the capabilities of the [RunAnywhere SDK](https://www.npmjs.com/org/runanywhere) - a privacy-first, on-device AI SDK for React Native.
 
-![RunAnywhere](https://img.shields.io/badge/RunAnywhere-0.16.0-00D9FF)
-![React Native](https://img.shields.io/badge/React%20Native-0.76+-61DAFB)
+![RunAnywhere](https://img.shields.io/badge/RunAnywhere-0.16.10-00D9FF)
+![React Native](https://img.shields.io/badge/React%20Native-0.76.5-61DAFB)
 ![Platforms](https://img.shields.io/badge/Platforms-iOS%20%7C%20Android-green)
 
 ## ✨ Features
@@ -52,24 +52,25 @@ This app uses three RunAnywhere packages:
 
 ### Prerequisites
 
-- Node.js 18 or higher
-- React Native development environment set up
-- For iOS: Xcode 14+, CocoaPods
-- For Android: Android Studio, JDK 17+
+- **Node.js** 18 or higher
+- **React Native CLI** development environment ([setup guide](https://reactnative.dev/docs/environment-setup))
+- **iOS:** Xcode 14+, CocoaPods, macOS
+- **Android:** Android Studio, JDK 17+, NDK 27+
+- **Physical device recommended** for best performance (AI models run slowly on simulators)
 
 ### Installation
 
 1. **Clone the repository**
    ```bash
+   git clone https://github.com/RunanywhereAI/react-native-starter-app.git
    cd react-native-starter-app
    ```
 
 2. **Install dependencies**
    ```bash
    npm install
-   # or
-   yarn install
    ```
+   > **Note:** This runs `patch-package` automatically via postinstall to apply necessary compatibility fixes.
 
 3. **iOS Setup**
    ```bash
@@ -80,19 +81,35 @@ This app uses three RunAnywhere packages:
 
 4. **Run the app**
 
-   For iOS:
+   **For iOS:**
    ```bash
-   npm run ios
-   # or
-   yarn ios
+   npx react-native run-ios
    ```
 
-   For Android:
+   **For Android:**
    ```bash
-   npm run android
-   # or
-   yarn android
+   npx react-native run-android
    ```
+
+### Running on Physical Android Device
+
+When running on a physical Android device, you need to set up port forwarding for the Metro bundler:
+
+```bash
+# Connect your device via USB and verify it's detected
+adb devices
+
+# Set up port forwarding (required for each USB session)
+adb reverse tcp:8081 tcp:8081
+
+# Start Metro bundler in one terminal
+npx react-native start
+
+# Run the app in another terminal
+npx react-native run-android
+```
+
+> **Tip:** If you see "Could not connect to development server", run `adb reverse tcp:8081 tcp:8081` again.
 
 ### iOS Permissions
 
@@ -198,6 +215,26 @@ All AI processing happens **on-device**. No data is sent to external servers. Th
 
 ## 🐛 Troubleshooting
 
+### "Could not connect to development server" (Android)
+This happens on physical Android devices because they can't reach `localhost` on your computer.
+
+```bash
+# Set up port forwarding
+adb reverse tcp:8081 tcp:8081
+
+# Verify Metro is running
+curl http://localhost:8081/status  # Should return "packager-status:running"
+```
+
+### CMake Error: "add_subdirectory given source which is not an existing directory"
+This happens when codegen hasn't run yet. Simply run the build again:
+
+```bash
+cd android && ./gradlew assembleDebug
+```
+
+The second run will succeed as codegen completes.
+
 ### Models not downloading
 - Check your internet connection
 - Ensure sufficient storage space (models can be 100MB-1GB)
@@ -219,6 +256,15 @@ All AI processing happens **on-device**. No data is sent to external servers. Th
 - Clear cache: `cd android && ./gradlew clean` or `cd ios && rm -rf Pods Podfile.lock`
 - Reinstall dependencies: `rm -rf node_modules && npm install`
 - For iOS: `cd ios && pod install --repo-update`
+
+### Patches not applied
+If you see build errors related to `react-native-nitro-modules`, ensure patches are applied:
+
+```bash
+npx patch-package
+```
+
+This should run automatically via `postinstall`, but you can run it manually if needed.
 
 ## 📚 Documentation
 
