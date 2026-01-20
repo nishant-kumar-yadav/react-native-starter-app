@@ -52,7 +52,9 @@ export const TextToSpeechScreen: React.FC = () => {
     try {
       // Per docs: https://docs.runanywhere.ai/react-native/tts/synthesize
       // result.audio contains base64-encoded float32 PCM
+      // Using same config as sample app for consistent voice output
       const result = await RunAnywhere.synthesize(text, { 
+        voice: 'default',
         rate: speechRate,
         pitch: 1.0,
         volume: 1.0,
@@ -60,21 +62,13 @@ export const TextToSpeechScreen: React.FC = () => {
 
       console.log(`[TTS] Synthesized: duration=${result.duration}s, sampleRate=${result.sampleRate}Hz, numSamples=${result.numSamples}`);
 
-      // Convert base64 float32 PCM to WAV
-      const wavData = createWavFromBase64Float32(result.audio, result.sampleRate, result.numSamples);
+      // Use SDK's built-in WAV converter (same as sample app)
+      const tempPath = await RunAnywhere.Audio.createWavFromPCMFloat32(
+        result.audio,
+        result.sampleRate || 22050
+      );
 
-      // Save to temporary file
-      const tempPath = `${RNFS.TemporaryDirectoryPath}/tts_output_${Date.now()}.wav`;
-      await RNFS.writeFile(tempPath, wavData, 'base64');
-
-      // Verify file was created
-      const exists = await RNFS.exists(tempPath);
-      if (!exists) {
-        throw new Error('Failed to create audio file');
-      }
-
-      const fileInfo = await RNFS.stat(tempPath);
-      console.log(`[TTS] WAV file created: ${tempPath}, size: ${fileInfo.size} bytes`);
+      console.log(`[TTS] WAV file created: ${tempPath}`);
 
       setCurrentAudioPath(tempPath);
       setIsSynthesizing(false);
@@ -122,62 +116,6 @@ export const TextToSpeechScreen: React.FC = () => {
     if (currentAudioPath) {
       RNFS.unlink(currentAudioPath).catch(() => {});
       setCurrentAudioPath(null);
-    }
-  };
-
-  // Convert base64-encoded float32 PCM to WAV format
-  const createWavFromBase64Float32 = (base64Audio: string, sampleRate: number, numSamples: number): string => {
-    // Decode base64 to get float32 samples
-    const binaryStr = atob(base64Audio);
-    const bytes = new Uint8Array(binaryStr.length);
-    for (let i = 0; i < binaryStr.length; i++) {
-      bytes[i] = binaryStr.charCodeAt(i);
-    }
-    const float32Samples = new Float32Array(bytes.buffer);
-
-    // Use actual sample count from decoded data
-    const actualNumSamples = float32Samples.length;
-    console.log(`[TTS] Converting ${actualNumSamples} float32 samples to WAV (expected: ${numSamples})`);
-
-    // Create WAV buffer (44 byte header + 16-bit PCM data)
-    const wavBuffer = new ArrayBuffer(44 + actualNumSamples * 2);
-    const view = new DataView(wavBuffer);
-
-    // WAV header
-    writeString(view, 0, 'RIFF');
-    view.setUint32(4, 36 + actualNumSamples * 2, true);
-    writeString(view, 8, 'WAVE');
-    writeString(view, 12, 'fmt ');
-    view.setUint32(16, 16, true); // Subchunk1Size
-    view.setUint16(20, 1, true);  // AudioFormat (PCM)
-    view.setUint16(22, 1, true);  // NumChannels (mono)
-    view.setUint32(24, sampleRate, true);
-    view.setUint32(28, sampleRate * 2, true); // ByteRate
-    view.setUint16(32, 2, true);  // BlockAlign
-    view.setUint16(34, 16, true); // BitsPerSample
-    writeString(view, 36, 'data');
-    view.setUint32(40, actualNumSamples * 2, true);
-
-    // Convert float32 samples to int16
-    let offset = 44;
-    for (let i = 0; i < float32Samples.length; i++) {
-      const s = Math.max(-1, Math.min(1, float32Samples[i]));
-      view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
-      offset += 2;
-    }
-
-    // Convert to base64
-    const uint8Array = new Uint8Array(wavBuffer);
-    let result = '';
-    for (let i = 0; i < uint8Array.length; i++) {
-      result += String.fromCharCode(uint8Array[i]);
-    }
-    return btoa(result);
-  };
-
-  const writeString = (view: DataView, offset: number, string: string) => {
-    for (let i = 0; i < string.length; i++) {
-      view.setUint8(offset + i, string.charCodeAt(i));
     }
   };
 
