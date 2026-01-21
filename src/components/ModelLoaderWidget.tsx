@@ -6,7 +6,6 @@ import {
   ActivityIndicator,
   StyleSheet,
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import { AppColors } from '../theme';
 
 interface ModelLoaderWidgetProps {
@@ -72,15 +71,12 @@ export const ModelLoaderWidget: React.FC<ModelLoaderWidgetProps> = ({
         )}
 
         {!isDownloading && !isLoading && (
-          <TouchableOpacity onPress={onLoad} activeOpacity={0.8}>
-            <LinearGradient
-              colors={[accentColor, adjustColorBrightness(accentColor, -20)]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              style={styles.button}
-            >
-              <Text style={styles.buttonText}>Download & Load Model</Text>
-            </LinearGradient>
+          <TouchableOpacity 
+            onPress={onLoad} 
+            activeOpacity={0.8}
+            style={[styles.button, { backgroundColor: accentColor }]}
+          >
+            <Text style={styles.buttonText}>Download & Load Model</Text>
           </TouchableOpacity>
         )}
 
@@ -92,16 +88,6 @@ export const ModelLoaderWidget: React.FC<ModelLoaderWidgetProps> = ({
       </View>
     </View>
   );
-};
-
-// Helper function to adjust color brightness
-const adjustColorBrightness = (color: string, percent: number): string => {
-  const num = parseInt(color.replace('#', ''), 16);
-  const amt = Math.round(2.55 * percent);
-  const R = Math.max(0, Math.min(255, (num >> 16) + amt));
-  const G = Math.max(0, Math.min(255, ((num >> 8) & 0x00ff) + amt));
-  const B = Math.max(0, Math.min(255, (num & 0x0000ff) + amt));
-  return `#${((R << 16) | (G << 8) | B).toString(16).padStart(6, '0')}`;
 };
 
 const styles = StyleSheet.create({
@@ -171,11 +157,16 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
+    minWidth: 220,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
   },
   buttonText: {
     fontSize: 16,
     fontWeight: '700',
     color: '#FFFFFF',
+    textAlign: 'center',
   },
   infoBox: {
     marginTop: 32,

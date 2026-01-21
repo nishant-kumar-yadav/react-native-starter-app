@@ -7,13 +7,13 @@ import {
   StatusBar,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { AppColors } from '../theme';
 import { FeatureCard } from '../components';
 import { RootStackParamList } from '../navigation/types';
 
 type HomeScreenProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
+  navigation: StackNavigationProp<RootStackParamList, 'Home'>;
 };
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
