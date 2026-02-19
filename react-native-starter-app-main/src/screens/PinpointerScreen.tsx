@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { SyncProgressCard } from '../components/SyncProgressCard';
+import { SyncProgressCard } from '../components';
 import {
     View,
     Text,
@@ -23,15 +23,16 @@ const { width, height } = Dimensions.get('window');
 
 export const PinpointerScreen: React.FC = () => {
     // --- PLUGGING IN THE STABLE BRAIN ---
-    const { 
-        searchText, setSearchText, 
-        searchResults, 
+    const {
+        searchText, setSearchText,
+        searchResults,
         isSearching, setIsSearching,
         selectedImage, setSelectedImage,
         isRecording, isTranscribing, // STT States
-        startListening, stopListening, 
+        startListening, stopListening,
         handleScan, handleShare, handleEdit,
-        handleFullSync, isSyncing, syncCount, totalImages // <--- Sync Wires Added
+        handleFullSync, handlePauseSync, handleResumeSync,
+        isSyncing, isPaused, syncCount, totalImages
     } = usePinpointer();
 
     const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -58,8 +59,8 @@ export const PinpointerScreen: React.FC = () => {
     };
 
     const renderResultItem = ({ item }: { item: any }) => (
-        <TouchableOpacity 
-            style={styles.resultItem} 
+        <TouchableOpacity
+            style={styles.resultItem}
             onPress={() => setSelectedImage(item.filePath)}
         >
             <View style={styles.resultIconContainer}>
@@ -107,16 +108,18 @@ export const PinpointerScreen: React.FC = () => {
                                 <Text style={styles.subTitle}>On-Device AI Search</Text>
                             </View>
 
-                            {/* --- ADDED SYNC CARD HERE --- */}
-                            <SyncProgressCard 
+                            {/* --- SYNC CARD --- */}
+                            <SyncProgressCard
                                 isSyncing={isSyncing}
+                                isPaused={isPaused}
                                 syncCount={syncCount}
-                                totalImages={totalImages}
                                 onStartSync={handleFullSync}
+                                onPauseSync={handlePauseSync}
+                                onResumeSync={handleResumeSync}
                             />
                         </>
                     )}
-              
+
 
                     {/* Search Bar */}
                     <View style={styles.searchBarContainer}>
@@ -134,15 +137,15 @@ export const PinpointerScreen: React.FC = () => {
                                     onChangeText={setSearchText}
                                     onFocus={() => setIsSearching(true)}
                                 />
-                                
+
                                 {/* WHISPER MICROPHONE */}
-                                <TouchableOpacity 
-                                    style={styles.micButton} 
+                                <TouchableOpacity
+                                    style={styles.micButton}
                                     onPressIn={startListening}
                                     onPressOut={stopListening}
                                 >
-                                    <LinearGradient 
-                                        colors={isRecording ? ['#FF416C', '#FF4B2B'] : [AppColors.accentCyan, AppColors.accentViolet]} 
+                                    <LinearGradient
+                                        colors={isRecording ? ['#FF416C', '#FF4B2B'] : [AppColors.accentCyan, AppColors.accentViolet]}
                                         style={styles.micGradient}
                                     >
                                         <Text style={styles.micIcon}>{isRecording ? "🎙️" : "🎤"}</Text>
@@ -150,12 +153,12 @@ export const PinpointerScreen: React.FC = () => {
                                 </TouchableOpacity>
 
                                 {/* BYPASS SCAN CAMERA */}
-                                <TouchableOpacity 
-                                    style={[styles.micButton, { marginLeft: 8 }]} 
+                                <TouchableOpacity
+                                    style={[styles.micButton, { marginLeft: 8 }]}
                                     onPress={handleScan}
                                 >
-                                    <LinearGradient 
-                                        colors={[AppColors.primaryMid, AppColors.primaryDark]} 
+                                    <LinearGradient
+                                        colors={[AppColors.primaryMid, AppColors.primaryDark]}
                                         style={styles.micGradient}
                                     >
                                         <Text style={styles.micIcon}>📷</Text>
@@ -202,8 +205,8 @@ export const PinpointerScreen: React.FC = () => {
                 <View style={styles.modalContainer}>
                     <View style={styles.modalHeader}>
                         <TouchableOpacity onPress={() => setSelectedImage(null)}><Text style={styles.headerIcon}>✕</Text></TouchableOpacity>
-                        <View style={{flexDirection: 'row'}}>
-                            <TouchableOpacity onPress={handleEdit} style={{marginRight: 25}}><Text style={styles.headerIcon}>✏️</Text></TouchableOpacity>
+                        <View style={{ flexDirection: 'row' }}>
+                            <TouchableOpacity onPress={handleEdit} style={{ marginRight: 25 }}><Text style={styles.headerIcon}>✏️</Text></TouchableOpacity>
                             <TouchableOpacity onPress={handleShare}><Text style={styles.headerIcon}>📤</Text></TouchableOpacity>
                         </View>
                     </View>

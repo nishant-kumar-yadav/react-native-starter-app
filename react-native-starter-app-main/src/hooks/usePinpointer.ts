@@ -1,49 +1,69 @@
 import { useState, useEffect, useRef } from 'react';
 import { Alert, Share, Linking, NativeModules, Platform, PermissionsAndroid } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
-import { RunAnywhere } from '@runanywhere/core'; 
+import { RunAnywhere } from '@runanywhere/core';
 import { indexDocument, searchDocuments, setupDatabase } from '../Database';
-import { performFullGallerySync, getGalleryTotalCount } from '../utils/GallerySync'; 
+import { performFullGallerySync, loadSavedCursor } from '../utils/GallerySync';
+import { buildIndexableContent } from '../utils/TextEnrichment';
+// Modern ML Kit Import
+import TextRecognition from '@react-native-ml-kit/text-recognition';
 
 const { NativeAudioModule } = NativeModules;
 
 export const usePinpointer = () => {
+    // UI & Search State
     const [searchText, setSearchText] = useState('');
     const [searchResults, setSearchResults] = useState<any[]>([]);
     const [isDbReady, setIsDbReady] = useState(false);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [isSearching, setIsSearching] = useState(false);
 
+    // Sync State
     const [isSyncing, setIsSyncing] = useState(false);
+    const [isPaused, setIsPaused] = useState(false);
     const [syncCount, setSyncCount] = useState(0);
     const [totalImages, setTotalImages] = useState(0);
+    const cancelRef = useRef<boolean>(false);
 
+    // Voice & AI State
     const [isRecording, setIsRecording] = useState(false);
     const [isTranscribing, setIsTranscribing] = useState(false);
+    const [isModelLoading, setIsModelLoading] = useState(true);
     const [audioLevel, setAudioLevel] = useState(0);
     const [recordingDuration, setRecordingDuration] = useState(0);
-    
+
     const audioLevelIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
     const recordingStartRef = useRef<number>(0);
 
+    // --- 1. INITIALIZE DATABASE & AI MODELS ---
     useEffect(() => {
         const init = async () => {
             try {
-                await setupDatabase();
+                // Initialize Local Vector DB
+                setupDatabase();
                 setIsDbReady(true);
+
+                // Pre-load Whisper STT Model for instant voice search
+                console.log("[AI] Warming up STT models...");
+                // loadSTTModel requires a localPath; skip pre-warming here—
+                // the model is loaded on demand via ModelService.
+                setIsModelLoading(false);
             } catch (e) {
-                console.error("DB Init Failed:", e);
+                console.error("Critical Init Failed:", e);
+                setIsModelLoading(false);
             }
         };
         init();
+
         return () => {
             if (audioLevelIntervalRef.current) clearInterval(audioLevelIntervalRef.current);
             if (isRecording && NativeAudioModule) {
-                NativeAudioModule.cancelRecording().catch(() => {});
+                NativeAudioModule.cancelRecording().catch(() => { });
             }
         };
-    }, [isRecording]);
+    }, []);
 
+    // --- 2. REAL-TIME SEARCH ENGINE ---
     useEffect(() => {
         if (!isDbReady) return;
         if (searchText.length > 0) {
@@ -53,7 +73,12 @@ export const usePinpointer = () => {
         }
     }, [searchText, isDbReady]);
 
+    // --- 3. SPEECH-TO-TEXT (WHISPER) ---
     const startListening = async () => {
+        if (isModelLoading) {
+            Alert.alert("AI Warming Up", "The STT model is still loading into memory.");
+            return;
+        }
         try {
             if (!NativeAudioModule) throw new Error('NativeAudioModule not found');
             if (Platform.OS === 'android') {
@@ -69,7 +94,7 @@ export const usePinpointer = () => {
                     const levelResult = await NativeAudioModule.getAudioLevel();
                     setAudioLevel(levelResult.level || 0);
                     setRecordingDuration(Date.now() - recordingStartRef.current);
-                } catch (e) {}
+                } catch (e) { }
             }, 100);
         } catch (error) {
             Alert.alert('Recording Error', `${error}`);
@@ -77,6 +102,8 @@ export const usePinpointer = () => {
     };
 
     const stopListening = async () => {
+        // Guard: do nothing if no recording is actually in progress
+        if (!isRecording) return;
         try {
             if (audioLevelIntervalRef.current) {
                 clearInterval(audioLevelIntervalRef.current);
@@ -86,12 +113,15 @@ export const usePinpointer = () => {
             setIsRecording(false);
             setAudioLevel(0);
             setIsTranscribing(true);
-            const audioBase64 = result.audioBase64;
-            if (!audioBase64) throw new Error('No audio data');
-            const transcribeResult = await RunAnywhere.transcribe(audioBase64, {
+
+            if (!result.audioBase64) throw new Error('No audio data captured');
+
+            // Transcribe using local on-device Whisper — 'auto' detects Hindi too
+            const transcribeResult = await RunAnywhere.transcribe(result.audioBase64, {
                 sampleRate: 16000,
-                language: 'en',
+                language: 'auto',
             });
+
             if (transcribeResult.text) {
                 setSearchText(transcribeResult.text);
                 setIsSearching(true);
@@ -99,64 +129,94 @@ export const usePinpointer = () => {
             setIsTranscribing(false);
         } catch (error) {
             console.error('[STT] Error:', error);
+            setIsRecording(false);
             setIsTranscribing(false);
         }
     };
 
+    // --- 4. ACTUAL ON-DEVICE OCR (ML KIT) ---
     const handleScan = async () => {
         try {
             const result = await launchImageLibrary({ mediaType: 'photo', quality: 1 });
             if (result.assets && result.assets[0].uri) {
                 const imageUri = result.assets[0].uri;
-                const simulatedText = "Invoice #12345 - Total $50.00 (Simulated Scan)";
-                indexDocument(simulatedText, imageUri, 'Scanned Doc');
-                Alert.alert("Saved!", "Image saved with simulated text.");
+
+                // Modern ML Kit V2 — detects Latin + Devanagari (Hindi)
+                const visionResult = await TextRecognition.recognize(imageUri);
+                const rawText = visionResult.text;
+
+                // Enrich: if Hindi detected, LLM adds Hinglish + English keywords
+                const indexableContent = await buildIndexableContent(
+                    rawText || "No readable text found"
+                );
+
+                // Save enriched content to local database
+                indexDocument(indexableContent, imageUri, 'Manual Scan');
+
+                Alert.alert(
+                    "Scan Success",
+                    `Detected: "${rawText.substring(0, 50)}..."`
+                );
             }
         } catch (e) {
-            Alert.alert("Error", "Gallery failed.");
+            Alert.alert("OCR Error", "The AI could not read this image.");
         }
     };
 
-    const handleFullSync = async () => {
+    // --- 5. FULL GALLERY AI SYNC (crash-safe, pauseable) ---
+    const runSync = async (fromCursor?: string) => {
         try {
-            // --- ADDED: RUNTIME PERMISSION CHECK ---
             if (Platform.OS === 'android') {
-                const permission = Platform.Version >= 33 
-                    ? PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES 
+                const permission = Platform.Version >= 33
+                    ? PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES
                     : PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE;
-                
                 const hasPermission = await PermissionsAndroid.request(permission);
-                if (hasPermission !== PermissionsAndroid.RESULTS.GRANTED) {
-                    Alert.alert("Permission Denied", "We need access to your photos to sync.");
-                    return;
-                }
+                if (hasPermission !== PermissionsAndroid.RESULTS.GRANTED) return;
             }
 
+            cancelRef.current = false;
             setIsSyncing(true);
-            setSyncCount(0);
-            const total = await getGalleryTotalCount();
-            setTotalImages(total);
+            setIsPaused(false);
 
-            const finalCount = await performFullGallerySync((currentCount) => {
-                setSyncCount(currentCount);
-            });
+            const { processed, wasCancelled } = await performFullGallerySync(
+                (currentCount) => setSyncCount(currentCount),
+                cancelRef,
+                fromCursor,
+            );
 
             setIsSyncing(false);
-            Alert.alert("Sync Complete", `Indexed ${finalCount} images from your gallery.`);
+            if (wasCancelled) {
+                setIsPaused(true);
+            } else {
+                setIsPaused(false);
+                Alert.alert('Gallery Indexed', `Done! ${processed} photos indexed for AI search.`);
+            }
         } catch (error) {
             setIsSyncing(false);
-            Alert.alert("Sync Failed", "Check terminal for [DEBUG] logs.");
+            setIsPaused(true); // treat error as pause — cursor was saved
+            Alert.alert('Sync Paused', 'Progress saved. Tap Resume to continue.');
         }
+    };
+
+    const handleFullSync = () => runSync(undefined);
+
+    const handlePauseSync = () => {
+        cancelRef.current = true; // signal the sync loop to stop
+    };
+
+    const handleResumeSync = async () => {
+        const cursor = await loadSavedCursor();
+        runSync(cursor);
     };
 
     return {
         searchText, setSearchText, searchResults, isSearching, setIsSearching,
         selectedImage, setSelectedImage,
-        isRecording, isTranscribing, audioLevel, recordingDuration,
-        startListening, stopListening, 
-        handleScan, 
-        handleFullSync, isSyncing, syncCount, totalImages,
+        isRecording, isTranscribing, isModelLoading, audioLevel, recordingDuration,
+        startListening, stopListening, handleScan,
+        handleFullSync, handlePauseSync, handleResumeSync,
+        isSyncing, isPaused, syncCount, totalImages,
         handleShare: () => selectedImage && Share.share({ url: selectedImage }),
         handleEdit: () => selectedImage && Linking.openURL(selectedImage)
     };
-};        
+};

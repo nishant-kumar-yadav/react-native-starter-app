@@ -11,7 +11,6 @@ import { AppColors } from '../theme';
 interface FeatureCardProps {
   title: string;
   subtitle: string;
-  icon: string;
   gradientColors: string[];
   onPress: () => void;
 }

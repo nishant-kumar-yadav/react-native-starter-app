@@ -2,7 +2,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
@@ -16,6 +15,12 @@
       android:theme="@style/AppTheme"
       android:usesCleartextTraffic="true"
       android:networkSecurityConfig="@xml/network_security_config">
+      
+      <!-- Latin OCR (English) + Devanagari OCR (Hindi) — both bundled at install time -->
+      <meta-data
+          android:name="com.google.mlkit.vision.DEPENDENCIES"
+          android:value="ocr,ocr_devanagari" />
+
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"

@@ -4,7 +4,6 @@ import { LlamaCPP } from '@runanywhere/llamacpp';
 import { ONNX, ModelArtifactType } from '@runanywhere/onnx';
 
 // Model IDs - matching sample app model registry
-// See: /Users/shubhammalhotra/Desktop/test-fresh/runanywhere-sdks/examples/react-native/RunAnywhereAI/App.tsx
 const MODEL_IDS = {
   llm: 'lfm2-350m-q8_0', // LiquidAI LFM2 - fast and efficient
   stt: 'sherpa-onnx-whisper-tiny.en',
@@ -16,23 +15,23 @@ interface ModelServiceState {
   isLLMDownloading: boolean;
   isSTTDownloading: boolean;
   isTTSDownloading: boolean;
-  
+
   llmDownloadProgress: number;
   sttDownloadProgress: number;
   ttsDownloadProgress: number;
-  
+
   // Load state
   isLLMLoading: boolean;
   isSTTLoading: boolean;
   isTTSLoading: boolean;
-  
+
   // Loaded state
   isLLMLoaded: boolean;
   isSTTLoaded: boolean;
   isTTSLoaded: boolean;
-  
+
   isVoiceAgentReady: boolean;
-  
+
   // Actions
   downloadAndLoadLLM: () => Promise<void>;
   downloadAndLoadSTT: () => Promise<void>;
@@ -60,23 +59,23 @@ export const ModelServiceProvider: React.FC<ModelServiceProviderProps> = ({ chil
   const [isLLMDownloading, setIsLLMDownloading] = useState(false);
   const [isSTTDownloading, setIsSTTDownloading] = useState(false);
   const [isTTSDownloading, setIsTTSDownloading] = useState(false);
-  
+
   const [llmDownloadProgress, setLLMDownloadProgress] = useState(0);
   const [sttDownloadProgress, setSTTDownloadProgress] = useState(0);
   const [ttsDownloadProgress, setTTSDownloadProgress] = useState(0);
-  
+
   // Load state
   const [isLLMLoading, setIsLLMLoading] = useState(false);
   const [isSTTLoading, setIsSTTLoading] = useState(false);
   const [isTTSLoading, setIsTTSLoading] = useState(false);
-  
+
   // Loaded state
   const [isLLMLoaded, setIsLLMLoaded] = useState(false);
   const [isSTTLoaded, setIsSTTLoaded] = useState(false);
   const [isTTSLoaded, setIsTTSLoaded] = useState(false);
-  
+
   const isVoiceAgentReady = isLLMLoaded && isSTTLoaded && isTTSLoaded;
-  
+
   // Check if model is downloaded (per docs: use getModelInfo and check localPath)
   const checkModelDownloaded = useCallback(async (modelId: string): Promise<boolean> => {
     try {
@@ -86,26 +85,26 @@ export const ModelServiceProvider: React.FC<ModelServiceProviderProps> = ({ chil
       return false;
     }
   }, []);
-  
+
   // Download and load LLM
   const downloadAndLoadLLM = useCallback(async () => {
     if (isLLMDownloading || isLLMLoading) return;
-    
+
     try {
       const isDownloaded = await checkModelDownloaded(MODEL_IDS.llm);
-      
+
       if (!isDownloaded) {
         setIsLLMDownloading(true);
         setLLMDownloadProgress(0);
-        
+
         // Download with progress (per docs: progress.progress is 0-1)
         await RunAnywhere.downloadModel(MODEL_IDS.llm, (progress) => {
           setLLMDownloadProgress(progress.progress * 100);
         });
-        
+
         setIsLLMDownloading(false);
       }
-      
+
       // Load the model (per docs: get localPath first, then load)
       setIsLLMLoading(true);
       const modelInfo = await RunAnywhere.getModelInfo(MODEL_IDS.llm);
@@ -120,25 +119,25 @@ export const ModelServiceProvider: React.FC<ModelServiceProviderProps> = ({ chil
       setIsLLMLoading(false);
     }
   }, [isLLMDownloading, isLLMLoading, checkModelDownloaded]);
-  
+
   // Download and load STT
   const downloadAndLoadSTT = useCallback(async () => {
     if (isSTTDownloading || isSTTLoading) return;
-    
+
     try {
       const isDownloaded = await checkModelDownloaded(MODEL_IDS.stt);
-      
+
       if (!isDownloaded) {
         setIsSTTDownloading(true);
         setSTTDownloadProgress(0);
-        
+
         await RunAnywhere.downloadModel(MODEL_IDS.stt, (progress) => {
           setSTTDownloadProgress(progress.progress * 100);
         });
-        
+
         setIsSTTDownloading(false);
       }
-      
+
       // Load the STT model (per docs: loadSTTModel(localPath, 'whisper'))
       setIsSTTLoading(true);
       const modelInfo = await RunAnywhere.getModelInfo(MODEL_IDS.stt);
@@ -153,25 +152,25 @@ export const ModelServiceProvider: React.FC<ModelServiceProviderProps> = ({ chil
       setIsSTTLoading(false);
     }
   }, [isSTTDownloading, isSTTLoading, checkModelDownloaded]);
-  
+
   // Download and load TTS
   const downloadAndLoadTTS = useCallback(async () => {
     if (isTTSDownloading || isTTSLoading) return;
-    
+
     try {
       const isDownloaded = await checkModelDownloaded(MODEL_IDS.tts);
-      
+
       if (!isDownloaded) {
         setIsTTSDownloading(true);
         setTTSDownloadProgress(0);
-        
+
         await RunAnywhere.downloadModel(MODEL_IDS.tts, (progress) => {
           setTTSDownloadProgress(progress.progress * 100);
         });
-        
+
         setIsTTSDownloading(false);
       }
-      
+
       // Load the TTS model (per docs: loadTTSModel(localPath, 'piper'))
       setIsTTSLoading(true);
       const modelInfo = await RunAnywhere.getModelInfo(MODEL_IDS.tts);
@@ -186,7 +185,7 @@ export const ModelServiceProvider: React.FC<ModelServiceProviderProps> = ({ chil
       setIsTTSLoading(false);
     }
   }, [isTTSDownloading, isTTSLoading, checkModelDownloaded]);
-  
+
   // Download and load all models
   const downloadAndLoadAllModels = useCallback(async () => {
     await Promise.all([
@@ -195,7 +194,7 @@ export const ModelServiceProvider: React.FC<ModelServiceProviderProps> = ({ chil
       downloadAndLoadTTS(),
     ]);
   }, [downloadAndLoadLLM, downloadAndLoadSTT, downloadAndLoadTTS]);
-  
+
   // Unload all models
   const unloadAllModels = useCallback(async () => {
     try {
@@ -209,7 +208,7 @@ export const ModelServiceProvider: React.FC<ModelServiceProviderProps> = ({ chil
       console.error('Error unloading models:', error);
     }
   }, []);
-  
+
   const value: ModelServiceState = {
     isLLMDownloading,
     isSTTDownloading,
@@ -230,7 +229,7 @@ export const ModelServiceProvider: React.FC<ModelServiceProviderProps> = ({ chil
     downloadAndLoadAllModels,
     unloadAllModels,
   };
-  
+
   return (
     <ModelServiceContext.Provider value={value}>
       {children}
@@ -240,7 +239,6 @@ export const ModelServiceProvider: React.FC<ModelServiceProviderProps> = ({ chil
 
 /**
  * Register default models with the SDK
- * Models match the sample app: /Users/shubhammalhotra/Desktop/test-fresh/runanywhere-sdks/examples/react-native/RunAnywhereAI/App.tsx
  */
 export const registerDefaultModels = async () => {
   // LLM Model - LiquidAI LFM2 350M (fast, efficient, great for mobile)
@@ -250,7 +248,7 @@ export const registerDefaultModels = async () => {
     url: 'https://huggingface.co/LiquidAI/LFM2-350M-GGUF/resolve/main/LFM2-350M-Q8_0.gguf',
     memoryRequirement: 400_000_000,
   });
-  
+
   // Also add SmolLM2 as alternative smaller model
   await LlamaCPP.addModel({
     id: 'smollm2-360m-q8_0',
@@ -258,7 +256,7 @@ export const registerDefaultModels = async () => {
     url: 'https://huggingface.co/prithivMLmods/SmolLM2-360M-GGUF/resolve/main/SmolLM2-360M.Q8_0.gguf',
     memoryRequirement: 500_000_000,
   });
-  
+
   // STT Model - Sherpa Whisper Tiny English
   // Using tar.gz from RunanywhereAI/sherpa-onnx for fast native extraction
   await ONNX.addModel({
@@ -269,7 +267,7 @@ export const registerDefaultModels = async () => {
     artifactType: ModelArtifactType.TarGzArchive,
     memoryRequirement: 75_000_000,
   });
-  
+
   // TTS Model - Piper TTS (US English - Medium quality)
   await ONNX.addModel({
     id: MODEL_IDS.tts,

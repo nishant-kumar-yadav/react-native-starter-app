@@ -18,11 +18,10 @@ import {
   SpeechToTextScreen,
   TextToSpeechScreen,
   VoicePipelineScreen,
+  PinpointerScreen,
+  ToolCallingScreen,
 } from './screens';
-
-// --- FIXED: Corrected path (App.tsx and Database.ts are likely in the same folder) ---
-import { PinpointerScreen } from './screens/PinpointerScreen'; 
-import { setupDatabase } from './Database'; 
+import { setupDatabase } from './Database';
 import { RootStackParamList } from './navigation/types';
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -42,7 +41,7 @@ const App: React.FC = () => {
         // 3. Register backends (Now using the top-level imports)
         LlamaCPP.register();
         ONNX.register();
-        
+
         await registerDefaultModels();
         console.log('All systems initialized successfully');
       } catch (error) {
@@ -82,6 +81,7 @@ const App: React.FC = () => {
             {/* Existing Hackathon Screens */}
             <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Chat" component={ChatScreen} options={{ title: 'My AI' }} />
+            <Stack.Screen name="ToolCalling" component={ToolCallingScreen} options={{ title: 'Tool Calling' }} />
             <Stack.Screen name="SpeechToText" component={SpeechToTextScreen} options={{ title: 'Speech to Text' }} />
             <Stack.Screen name="TextToSpeech" component={TextToSpeechScreen} options={{ title: 'Text to Speech' }} />
             <Stack.Screen name="VoicePipeline" component={VoicePipelineScreen} options={{ title: 'Voice Pipeline' }} />
