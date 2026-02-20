@@ -60,22 +60,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
             </View>
           </View>
 
-          {/* Feature Cards Grid */}
           <View style={styles.gridContainer}>
-            <View style={styles.row}>
-              <FeatureCard
-                title="Chat"
-                subtitle="LLM Text Generation"
-                gradientColors={[AppColors.accentCyan, '#0EA5E9']}
-                onPress={() => navigation.navigate('Chat')}
-              />
-              <FeatureCard
-                title="Tools"
-                subtitle="Tool Calling"
-                gradientColors={[AppColors.accentOrange, '#E67E22']}
-                onPress={() => navigation.navigate('ToolCalling')}
-              />
-            </View>
             <View style={styles.row}>
               <FeatureCard
                 title="Speech"
@@ -92,26 +77,17 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
             </View>
             <View style={styles.row}>
               <FeatureCard
-                title="Pipeline"
-                subtitle="Voice Agent"
-                gradientColors={[AppColors.accentGreen, '#059669']}
-                onPress={() => navigation.navigate('VoicePipeline')}
-              />
-              <FeatureCard
                 title="Clipboard"
                 subtitle="Copy from World"
                 gradientColors={[AppColors.accentOrange, '#E67E22']}
                 onPress={() => navigation.navigate('SmartClipboard')}
               />
-            </View>
-            <View style={styles.row}>
               <FeatureCard
                 title="Speak"
                 subtitle="Point & Listen"
                 gradientColors={['#10B981', '#047857']}
                 onPress={() => navigation.navigate('PointAndSpeak')}
               />
-              <View style={{ flex: 1, margin: 8 }} />
             </View>
           </View>
 

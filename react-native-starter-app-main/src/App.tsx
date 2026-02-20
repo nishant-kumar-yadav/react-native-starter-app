@@ -14,12 +14,9 @@ import { ModelServiceProvider, registerDefaultModels } from './services/ModelSer
 import { AppColors } from './theme';
 import {
   HomeScreen,
-  ChatScreen,
   SpeechToTextScreen,
   TextToSpeechScreen,
-  VoicePipelineScreen,
   PinpointerScreen,
-  ToolCallingScreen,
   SmartClipboardScreen,
   PointAndSpeakScreen,
 } from './screens';
@@ -82,11 +79,8 @@ const App: React.FC = () => {
 
             {/* Existing Hackathon Screens */}
             <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
-            <Stack.Screen name="Chat" component={ChatScreen} options={{ title: 'My AI' }} />
-            <Stack.Screen name="ToolCalling" component={ToolCallingScreen} options={{ title: 'Tool Calling' }} />
             <Stack.Screen name="SpeechToText" component={SpeechToTextScreen} options={{ title: 'Speech to Text' }} />
             <Stack.Screen name="TextToSpeech" component={TextToSpeechScreen} options={{ title: 'Text to Speech' }} />
-            <Stack.Screen name="VoicePipeline" component={VoicePipelineScreen} options={{ title: 'Voice Pipeline' }} />
 
             {/* New Feature Screens */}
             <Stack.Screen name="SmartClipboard" component={SmartClipboardScreen} options={{ title: 'Smart Clipboard' }} />
