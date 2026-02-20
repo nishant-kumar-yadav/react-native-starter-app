@@ -1,0 +1,870 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.14.3/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :gradle-plugin:settings-plugin:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :gradle-plugin:shared:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :gradle-plugin:shared:compileKotlin UP-TO-DATE
+> Task :gradle-plugin:shared:compileJava NO-SOURCE
+> Task :gradle-plugin:shared:processResources NO-SOURCE
+> Task :gradle-plugin:shared:classes UP-TO-DATE
+> Task :gradle-plugin:shared:jar UP-TO-DATE
+> Task :gradle-plugin:settings-plugin:compileKotlin UP-TO-DATE
+> Task :gradle-plugin:settings-plugin:compileJava NO-SOURCE
+> Task :gradle-plugin:settings-plugin:pluginDescriptors UP-TO-DATE
+> Task :gradle-plugin:settings-plugin:processResources UP-TO-DATE
+> Task :gradle-plugin:settings-plugin:classes UP-TO-DATE
+> Task :gradle-plugin:settings-plugin:jar UP-TO-DATE
+> Task :gradle-plugin:react-native-gradle-plugin:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :gradle-plugin:react-native-gradle-plugin:compileKotlin UP-TO-DATE
+> Task :gradle-plugin:react-native-gradle-plugin:compileJava NO-SOURCE
+> Task :gradle-plugin:react-native-gradle-plugin:pluginDescriptors UP-TO-DATE
+> Task :gradle-plugin:react-native-gradle-plugin:processResources UP-TO-DATE
+> Task :gradle-plugin:react-native-gradle-plugin:classes UP-TO-DATE
+> Task :gradle-plugin:react-native-gradle-plugin:jar UP-TO-DATE
+
+> Configure project :react-native-nitro-modules
+[NitroModules] ? Your app is boosted by nitro modules!
+
+> Configure project :runanywhere_core
+[NitroModules] ? runanywherecore is boosted by nitro!
+[RunAnywhereCore] Using node binary: node
+
+> Configure project :runanywhere_llamacpp
+[NitroModules] ? runanywherellama is boosted by nitro!
+[RunAnywhereLlama] Using node binary: node
+
+> Configure project :runanywhere_onnx
+[NitroModules] ? runanywhereonnx is boosted by nitro!
+[RunAnywhereONNX] Using node binary: node
+
+> Task :app:generateAutolinkingNewArchitectureFiles UP-TO-DATE
+> Task :app:generateAutolinkingPackageList UP-TO-DATE
+> Task :app:generateCodegenSchemaFromJavaScript SKIPPED
+> Task :app:generateCodegenArtifactsFromSchema SKIPPED
+> Task :app:generateReactNativeEntryPoint UP-TO-DATE
+> Task :react-native-async-storage_async-storage:generateCodegenSchemaFromJavaScript UP-TO-DATE
+> Task :react-native-async-storage_async-storage:generateCodegenArtifactsFromSchema UP-TO-DATE
+> Task :react-native-async-storage_async-storage:preBuild UP-TO-DATE
+> Task :react-native-camera-roll_camera-roll:generateCodegenSchemaFromJavaScript UP-TO-DATE
+> Task :react-native-camera-roll_camera-roll:generateCodegenArtifactsFromSchema UP-TO-DATE
+> Task :react-native-camera-roll_camera-roll:preBuild UP-TO-DATE
+> Task :react-native-fs:preBuild UP-TO-DATE
+> Task :react-native-gesture-handler:generateCodegenSchemaFromJavaScript UP-TO-DATE
+> Task :react-native-gesture-handler:generateCodegenArtifactsFromSchema UP-TO-DATE
+> Task :react-native-gesture-handler:preBuild UP-TO-DATE
+> Task :react-native-image-picker:generateCodegenSchemaFromJavaScript UP-TO-DATE
+> Task :react-native-image-picker:generateCodegenArtifactsFromSchema UP-TO-DATE
+> Task :react-native-image-picker:preBuild UP-TO-DATE
+> Task :react-native-linear-gradient:preBuild UP-TO-DATE
+> Task :react-native-live-audio-stream:preBuild UP-TO-DATE
+> Task :react-native-ml-kit_image-labeling:preBuild UP-TO-DATE
+> Task :react-native-ml-kit_text-recognition:preBuild UP-TO-DATE
+> Task :react-native-nitro-modules:generateCodegenSchemaFromJavaScript UP-TO-DATE
+> Task :react-native-nitro-modules:generateCodegenArtifactsFromSchema UP-TO-DATE
+> Task :react-native-nitro-modules:prepareHeaders UP-TO-DATE
+> Task :react-native-nitro-modules:preBuild UP-TO-DATE
+> Task :react-native-quick-sqlite:generateCodegenSchemaFromJavaScript UP-TO-DATE
+> Task :react-native-quick-sqlite:generateCodegenArtifactsFromSchema UP-TO-DATE
+> Task :react-native-quick-sqlite:preBuild UP-TO-DATE
+> Task :react-native-safe-area-context:generateCodegenSchemaFromJavaScript UP-TO-DATE
+> Task :react-native-safe-area-context:generateCodegenArtifactsFromSchema UP-TO-DATE
+> Task :react-native-safe-area-context:preBuild UP-TO-DATE
+> Task :react-native-screens:generateCodegenSchemaFromJavaScript UP-TO-DATE
+> Task :react-native-screens:generateCodegenArtifactsFromSchema UP-TO-DATE
+> Task :react-native-screens:preBuild UP-TO-DATE
+> Task :react-native-sound:generateCodegenSchemaFromJavaScript UP-TO-DATE
+> Task :react-native-sound:generateCodegenArtifactsFromSchema UP-TO-DATE
+> Task :react-native-sound:preBuild UP-TO-DATE
+
+> Task :runanywhere_core:downloadNativeLibs
+[RunAnywhereCore] ? Using bundled native libraries from npm package for ABIs: arm64-v8a, x86_64
+
+> Task :runanywhere_core:generateCodegenSchemaFromJavaScript UP-TO-DATE
+> Task :runanywhere_core:generateCodegenArtifactsFromSchema UP-TO-DATE
+> Task :runanywhere_core:preBuild
+
+> Task :runanywhere_llamacpp:downloadNativeLibs
+[RunAnywhereLlama] ? Using bundled native libraries from npm package for ABIs: arm64-v8a, x86_64
+
+> Task :runanywhere_llamacpp:generateCodegenSchemaFromJavaScript UP-TO-DATE
+> Task :runanywhere_llamacpp:generateCodegenArtifactsFromSchema UP-TO-DATE
+> Task :runanywhere_llamacpp:preBuild
+
+> Task :runanywhere_onnx:downloadNativeLibs
+[RunAnywhereONNX] ? Using bundled native libraries from npm package for ABIs: arm64-v8a, x86_64
+
+> Task :runanywhere_onnx:generateCodegenSchemaFromJavaScript UP-TO-DATE
+> Task :runanywhere_onnx:generateCodegenArtifactsFromSchema UP-TO-DATE
+> Task :runanywhere_onnx:preBuild
+> Task :app:preBuild
+> Task :app:preDebugBuild
+> Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-async-storage_async-storage:preDebugBuild UP-TO-DATE
+> Task :react-native-async-storage_async-storage:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-camera-roll_camera-roll:preDebugBuild UP-TO-DATE
+> Task :react-native-camera-roll_camera-roll:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-fs:preDebugBuild UP-TO-DATE
+> Task :react-native-fs:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-gesture-handler:preDebugBuild UP-TO-DATE
+> Task :react-native-gesture-handler:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-image-picker:preDebugBuild UP-TO-DATE
+> Task :react-native-image-picker:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-linear-gradient:preDebugBuild UP-TO-DATE
+> Task :react-native-linear-gradient:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-live-audio-stream:preDebugBuild UP-TO-DATE
+> Task :react-native-live-audio-stream:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-ml-kit_image-labeling:preDebugBuild UP-TO-DATE
+> Task :react-native-ml-kit_image-labeling:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-ml-kit_text-recognition:preDebugBuild UP-TO-DATE
+> Task :react-native-ml-kit_text-recognition:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-nitro-modules:preDebugBuild UP-TO-DATE
+> Task :react-native-nitro-modules:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-quick-sqlite:preDebugBuild UP-TO-DATE
+> Task :react-native-quick-sqlite:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-safe-area-context:preDebugBuild UP-TO-DATE
+> Task :react-native-safe-area-context:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-screens:preDebugBuild UP-TO-DATE
+> Task :react-native-screens:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-sound:preDebugBuild UP-TO-DATE
+> Task :react-native-sound:writeDebugAarMetadata UP-TO-DATE
+> Task :runanywhere_core:preDebugBuild
+> Task :runanywhere_core:writeDebugAarMetadata UP-TO-DATE
+> Task :runanywhere_llamacpp:preDebugBuild
+> Task :runanywhere_llamacpp:writeDebugAarMetadata UP-TO-DATE
+> Task :runanywhere_onnx:preDebugBuild
+> Task :runanywhere_onnx:writeDebugAarMetadata UP-TO-DATE
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:generateDebugResValues UP-TO-DATE
+> Task :react-native-async-storage_async-storage:generateDebugResValues UP-TO-DATE
+> Task :react-native-async-storage_async-storage:generateDebugResources UP-TO-DATE
+> Task :react-native-async-storage_async-storage:packageDebugResources UP-TO-DATE
+> Task :react-native-camera-roll_camera-roll:generateDebugResValues UP-TO-DATE
+> Task :react-native-camera-roll_camera-roll:generateDebugResources UP-TO-DATE
+> Task :react-native-camera-roll_camera-roll:packageDebugResources UP-TO-DATE
+> Task :react-native-fs:generateDebugResValues UP-TO-DATE
+> Task :react-native-fs:generateDebugResources UP-TO-DATE
+> Task :react-native-fs:packageDebugResources UP-TO-DATE
+> Task :react-native-gesture-handler:generateDebugResValues UP-TO-DATE
+> Task :react-native-gesture-handler:generateDebugResources UP-TO-DATE
+> Task :react-native-gesture-handler:packageDebugResources UP-TO-DATE
+> Task :react-native-image-picker:generateDebugResValues UP-TO-DATE
+> Task :react-native-image-picker:generateDebugResources UP-TO-DATE
+> Task :react-native-image-picker:packageDebugResources UP-TO-DATE
+> Task :react-native-linear-gradient:generateDebugResValues UP-TO-DATE
+> Task :react-native-linear-gradient:generateDebugResources UP-TO-DATE
+> Task :react-native-linear-gradient:packageDebugResources UP-TO-DATE
+> Task :react-native-live-audio-stream:generateDebugResValues UP-TO-DATE
+> Task :react-native-live-audio-stream:generateDebugResources UP-TO-DATE
+> Task :react-native-live-audio-stream:packageDebugResources UP-TO-DATE
+> Task :react-native-ml-kit_image-labeling:generateDebugResValues UP-TO-DATE
+> Task :react-native-ml-kit_image-labeling:generateDebugResources UP-TO-DATE
+> Task :react-native-ml-kit_image-labeling:packageDebugResources UP-TO-DATE
+> Task :react-native-ml-kit_text-recognition:generateDebugResValues UP-TO-DATE
+> Task :react-native-ml-kit_text-recognition:generateDebugResources UP-TO-DATE
+> Task :react-native-ml-kit_text-recognition:packageDebugResources UP-TO-DATE
+> Task :react-native-nitro-modules:generateDebugResValues UP-TO-DATE
+> Task :react-native-nitro-modules:generateDebugResources UP-TO-DATE
+> Task :react-native-nitro-modules:packageDebugResources UP-TO-DATE
+> Task :react-native-quick-sqlite:generateDebugResValues UP-TO-DATE
+> Task :react-native-quick-sqlite:generateDebugResources UP-TO-DATE
+> Task :react-native-quick-sqlite:packageDebugResources UP-TO-DATE
+> Task :react-native-safe-area-context:generateDebugResValues UP-TO-DATE
+> Task :react-native-safe-area-context:generateDebugResources UP-TO-DATE
+> Task :react-native-safe-area-context:packageDebugResources UP-TO-DATE
+> Task :react-native-screens:generateDebugResValues UP-TO-DATE
+> Task :react-native-screens:generateDebugResources UP-TO-DATE
+> Task :react-native-screens:packageDebugResources UP-TO-DATE
+> Task :react-native-sound:generateDebugResValues UP-TO-DATE
+> Task :react-native-sound:generateDebugResources UP-TO-DATE
+> Task :react-native-sound:packageDebugResources UP-TO-DATE
+> Task :runanywhere_core:generateDebugResValues UP-TO-DATE
+> Task :runanywhere_core:generateDebugResources UP-TO-DATE
+> Task :runanywhere_core:packageDebugResources UP-TO-DATE
+> Task :runanywhere_llamacpp:generateDebugResValues UP-TO-DATE
+> Task :runanywhere_llamacpp:generateDebugResources UP-TO-DATE
+> Task :runanywhere_llamacpp:packageDebugResources UP-TO-DATE
+> Task :runanywhere_onnx:generateDebugResValues UP-TO-DATE
+> Task :runanywhere_onnx:generateDebugResources UP-TO-DATE
+> Task :runanywhere_onnx:packageDebugResources UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-async-storage_async-storage:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-async-storage_async-storage:processDebugManifest UP-TO-DATE
+> Task :react-native-camera-roll_camera-roll:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-camera-roll_camera-roll:processDebugManifest UP-TO-DATE
+> Task :react-native-fs:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-fs:processDebugManifest UP-TO-DATE
+> Task :react-native-gesture-handler:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-gesture-handler:processDebugManifest UP-TO-DATE
+> Task :react-native-image-picker:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-image-picker:processDebugManifest UP-TO-DATE
+> Task :react-native-linear-gradient:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-linear-gradient:processDebugManifest UP-TO-DATE
+> Task :react-native-live-audio-stream:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-live-audio-stream:processDebugManifest UP-TO-DATE
+> Task :react-native-ml-kit_image-labeling:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-ml-kit_image-labeling:processDebugManifest UP-TO-DATE
+> Task :react-native-ml-kit_text-recognition:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-ml-kit_text-recognition:processDebugManifest UP-TO-DATE
+> Task :react-native-nitro-modules:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-nitro-modules:processDebugManifest UP-TO-DATE
+> Task :react-native-quick-sqlite:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-quick-sqlite:processDebugManifest UP-TO-DATE
+> Task :react-native-safe-area-context:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-safe-area-context:processDebugManifest UP-TO-DATE
+> Task :react-native-screens:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-screens:processDebugManifest UP-TO-DATE
+> Task :react-native-sound:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-sound:processDebugManifest UP-TO-DATE
+> Task :runanywhere_core:extractDeepLinksDebug UP-TO-DATE
+> Task :runanywhere_core:processDebugManifest UP-TO-DATE
+> Task :runanywhere_llamacpp:extractDeepLinksDebug UP-TO-DATE
+> Task :runanywhere_llamacpp:processDebugManifest UP-TO-DATE
+> Task :runanywhere_onnx:extractDeepLinksDebug UP-TO-DATE
+> Task :runanywhere_onnx:processDebugManifest UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :react-native-async-storage_async-storage:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-async-storage_async-storage:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-async-storage_async-storage:generateDebugRFile UP-TO-DATE
+> Task :react-native-camera-roll_camera-roll:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-camera-roll_camera-roll:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-camera-roll_camera-roll:generateDebugRFile UP-TO-DATE
+> Task :react-native-fs:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-fs:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-fs:generateDebugRFile UP-TO-DATE
+> Task :react-native-gesture-handler:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-gesture-handler:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-gesture-handler:generateDebugRFile UP-TO-DATE
+> Task :react-native-image-picker:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-image-picker:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-image-picker:generateDebugRFile UP-TO-DATE
+> Task :react-native-linear-gradient:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-linear-gradient:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-linear-gradient:generateDebugRFile UP-TO-DATE
+> Task :react-native-live-audio-stream:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-live-audio-stream:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-live-audio-stream:generateDebugRFile UP-TO-DATE
+> Task :react-native-ml-kit_image-labeling:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-ml-kit_image-labeling:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-ml-kit_image-labeling:generateDebugRFile UP-TO-DATE
+> Task :react-native-ml-kit_text-recognition:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-ml-kit_text-recognition:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-ml-kit_text-recognition:generateDebugRFile UP-TO-DATE
+> Task :react-native-nitro-modules:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-nitro-modules:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-nitro-modules:generateDebugRFile UP-TO-DATE
+> Task :react-native-quick-sqlite:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-quick-sqlite:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-quick-sqlite:generateDebugRFile UP-TO-DATE
+> Task :react-native-safe-area-context:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-safe-area-context:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-safe-area-context:generateDebugRFile UP-TO-DATE
+> Task :react-native-screens:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-screens:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-screens:generateDebugRFile UP-TO-DATE
+> Task :react-native-sound:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-sound:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-sound:generateDebugRFile UP-TO-DATE
+> Task :runanywhere_core:compileDebugLibraryResources UP-TO-DATE
+> Task :runanywhere_core:parseDebugLocalResources UP-TO-DATE
+> Task :runanywhere_core:generateDebugRFile UP-TO-DATE
+> Task :runanywhere_llamacpp:compileDebugLibraryResources UP-TO-DATE
+> Task :runanywhere_llamacpp:parseDebugLocalResources UP-TO-DATE
+> Task :runanywhere_llamacpp:generateDebugRFile UP-TO-DATE
+> Task :runanywhere_onnx:compileDebugLibraryResources UP-TO-DATE
+> Task :runanywhere_onnx:parseDebugLocalResources UP-TO-DATE
+> Task :runanywhere_onnx:generateDebugRFile UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :react-native-async-storage_async-storage:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-async-storage_async-storage:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-async-storage_async-storage:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-async-storage_async-storage:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-camera-roll_camera-roll:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-camera-roll_camera-roll:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-camera-roll_camera-roll:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-camera-roll_camera-roll:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-fs:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-fs:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-fs:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-fs:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-gesture-handler:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :react-native-gesture-handler:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-gesture-handler:compileDebugKotlin UP-TO-DATE
+> Task :react-native-gesture-handler:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-gesture-handler:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-gesture-handler:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-image-picker:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-image-picker:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-image-picker:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-image-picker:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-linear-gradient:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-linear-gradient:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-linear-gradient:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-linear-gradient:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-live-audio-stream:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-live-audio-stream:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-live-audio-stream:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-live-audio-stream:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-ml-kit_image-labeling:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-ml-kit_image-labeling:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-ml-kit_image-labeling:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-ml-kit_image-labeling:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-ml-kit_text-recognition:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-ml-kit_text-recognition:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-ml-kit_text-recognition:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-ml-kit_text-recognition:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-nitro-modules:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :react-native-nitro-modules:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-nitro-modules:compileDebugKotlin UP-TO-DATE
+> Task :react-native-nitro-modules:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-nitro-modules:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-nitro-modules:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-quick-sqlite:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :react-native-quick-sqlite:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-quick-sqlite:compileDebugKotlin NO-SOURCE
+> Task :react-native-quick-sqlite:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-quick-sqlite:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-quick-sqlite:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-safe-area-context:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :react-native-safe-area-context:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-safe-area-context:compileDebugKotlin UP-TO-DATE
+> Task :react-native-safe-area-context:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-safe-area-context:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-safe-area-context:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-screens:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :react-native-screens:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-screens:compileDebugKotlin UP-TO-DATE
+> Task :react-native-screens:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-screens:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-screens:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-sound:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :react-native-sound:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-sound:compileDebugKotlin UP-TO-DATE
+> Task :react-native-sound:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-sound:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-sound:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :runanywhere_core:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :runanywhere_core:generateDebugBuildConfig UP-TO-DATE
+> Task :runanywhere_core:compileDebugKotlin UP-TO-DATE
+> Task :runanywhere_core:javaPreCompileDebug UP-TO-DATE
+> Task :runanywhere_core:compileDebugJavaWithJavac UP-TO-DATE
+> Task :runanywhere_core:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :runanywhere_llamacpp:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :runanywhere_llamacpp:generateDebugBuildConfig UP-TO-DATE
+> Task :runanywhere_llamacpp:compileDebugKotlin UP-TO-DATE
+> Task :runanywhere_llamacpp:javaPreCompileDebug UP-TO-DATE
+> Task :runanywhere_llamacpp:compileDebugJavaWithJavac UP-TO-DATE
+> Task :runanywhere_llamacpp:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :runanywhere_onnx:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :runanywhere_onnx:generateDebugBuildConfig UP-TO-DATE
+> Task :runanywhere_onnx:compileDebugKotlin UP-TO-DATE
+> Task :runanywhere_onnx:javaPreCompileDebug UP-TO-DATE
+> Task :runanywhere_onnx:compileDebugJavaWithJavac UP-TO-DATE
+> Task :runanywhere_onnx:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :app:compileDebugKotlin UP-TO-DATE
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :app:compileDebugJavaWithJavac UP-TO-DATE
+> Task :app:mergeDebugShaders UP-TO-DATE
+> Task :app:compileDebugShaders NO-SOURCE
+> Task :app:generateDebugAssets UP-TO-DATE
+> Task :react-native-async-storage_async-storage:mergeDebugShaders UP-TO-DATE
+> Task :react-native-async-storage_async-storage:compileDebugShaders NO-SOURCE
+> Task :react-native-async-storage_async-storage:generateDebugAssets UP-TO-DATE
+> Task :react-native-async-storage_async-storage:mergeDebugAssets UP-TO-DATE
+> Task :react-native-camera-roll_camera-roll:mergeDebugShaders UP-TO-DATE
+> Task :react-native-camera-roll_camera-roll:compileDebugShaders NO-SOURCE
+> Task :react-native-camera-roll_camera-roll:generateDebugAssets UP-TO-DATE
+> Task :react-native-camera-roll_camera-roll:mergeDebugAssets UP-TO-DATE
+> Task :react-native-fs:mergeDebugShaders UP-TO-DATE
+> Task :react-native-fs:compileDebugShaders NO-SOURCE
+> Task :react-native-fs:generateDebugAssets UP-TO-DATE
+> Task :react-native-fs:mergeDebugAssets UP-TO-DATE
+> Task :react-native-gesture-handler:mergeDebugShaders UP-TO-DATE
+> Task :react-native-gesture-handler:compileDebugShaders NO-SOURCE
+> Task :react-native-gesture-handler:generateDebugAssets UP-TO-DATE
+> Task :react-native-gesture-handler:mergeDebugAssets UP-TO-DATE
+> Task :react-native-image-picker:mergeDebugShaders UP-TO-DATE
+> Task :react-native-image-picker:compileDebugShaders NO-SOURCE
+> Task :react-native-image-picker:generateDebugAssets UP-TO-DATE
+> Task :react-native-image-picker:mergeDebugAssets UP-TO-DATE
+> Task :react-native-linear-gradient:mergeDebugShaders UP-TO-DATE
+> Task :react-native-linear-gradient:compileDebugShaders NO-SOURCE
+> Task :react-native-linear-gradient:generateDebugAssets UP-TO-DATE
+> Task :react-native-linear-gradient:mergeDebugAssets UP-TO-DATE
+> Task :react-native-live-audio-stream:mergeDebugShaders UP-TO-DATE
+> Task :react-native-live-audio-stream:compileDebugShaders NO-SOURCE
+> Task :react-native-live-audio-stream:generateDebugAssets UP-TO-DATE
+> Task :react-native-live-audio-stream:mergeDebugAssets UP-TO-DATE
+> Task :react-native-ml-kit_image-labeling:mergeDebugShaders UP-TO-DATE
+> Task :react-native-ml-kit_image-labeling:compileDebugShaders NO-SOURCE
+> Task :react-native-ml-kit_image-labeling:generateDebugAssets UP-TO-DATE
+> Task :react-native-ml-kit_image-labeling:mergeDebugAssets UP-TO-DATE
+> Task :react-native-ml-kit_text-recognition:mergeDebugShaders UP-TO-DATE
+> Task :react-native-ml-kit_text-recognition:compileDebugShaders NO-SOURCE
+> Task :react-native-ml-kit_text-recognition:generateDebugAssets UP-TO-DATE
+> Task :react-native-ml-kit_text-recognition:mergeDebugAssets UP-TO-DATE
+> Task :react-native-nitro-modules:mergeDebugShaders UP-TO-DATE
+> Task :react-native-nitro-modules:compileDebugShaders NO-SOURCE
+> Task :react-native-nitro-modules:generateDebugAssets UP-TO-DATE
+> Task :react-native-nitro-modules:mergeDebugAssets UP-TO-DATE
+> Task :react-native-quick-sqlite:mergeDebugShaders UP-TO-DATE
+> Task :react-native-quick-sqlite:compileDebugShaders NO-SOURCE
+> Task :react-native-quick-sqlite:generateDebugAssets UP-TO-DATE
+> Task :react-native-quick-sqlite:mergeDebugAssets UP-TO-DATE
+> Task :react-native-safe-area-context:mergeDebugShaders UP-TO-DATE
+> Task :react-native-safe-area-context:compileDebugShaders NO-SOURCE
+> Task :react-native-safe-area-context:generateDebugAssets UP-TO-DATE
+> Task :react-native-safe-area-context:mergeDebugAssets UP-TO-DATE
+> Task :react-native-screens:mergeDebugShaders UP-TO-DATE
+> Task :react-native-screens:compileDebugShaders NO-SOURCE
+> Task :react-native-screens:generateDebugAssets UP-TO-DATE
+> Task :react-native-screens:mergeDebugAssets UP-TO-DATE
+> Task :react-native-sound:mergeDebugShaders UP-TO-DATE
+> Task :react-native-sound:compileDebugShaders NO-SOURCE
+> Task :react-native-sound:generateDebugAssets UP-TO-DATE
+> Task :react-native-sound:mergeDebugAssets UP-TO-DATE
+> Task :runanywhere_core:mergeDebugShaders UP-TO-DATE
+> Task :runanywhere_core:compileDebugShaders NO-SOURCE
+> Task :runanywhere_core:generateDebugAssets UP-TO-DATE
+> Task :runanywhere_core:mergeDebugAssets UP-TO-DATE
+> Task :runanywhere_llamacpp:mergeDebugShaders UP-TO-DATE
+> Task :runanywhere_llamacpp:compileDebugShaders NO-SOURCE
+> Task :runanywhere_llamacpp:generateDebugAssets UP-TO-DATE
+> Task :runanywhere_llamacpp:mergeDebugAssets UP-TO-DATE
+> Task :runanywhere_onnx:mergeDebugShaders UP-TO-DATE
+> Task :runanywhere_onnx:compileDebugShaders NO-SOURCE
+> Task :runanywhere_onnx:generateDebugAssets UP-TO-DATE
+> Task :runanywhere_onnx:mergeDebugAssets UP-TO-DATE
+> Task :app:mergeDebugAssets UP-TO-DATE
+> Task :app:compressDebugAssets UP-TO-DATE
+> Task :react-native-sound:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-screens:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :runanywhere_llamacpp:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :runanywhere_onnx:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :runanywhere_core:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-gesture-handler:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-nitro-modules:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-quick-sqlite:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-safe-area-context:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-async-storage_async-storage:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-camera-roll_camera-roll:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-ml-kit_image-labeling:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-ml-kit_text-recognition:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-fs:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-image-picker:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-linear-gradient:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-live-audio-stream:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :app:desugarDebugFileDependencies UP-TO-DATE
+> Task :app:dexBuilderDebug UP-TO-DATE
+> Task :app:mergeDebugGlobalSynthetics UP-TO-DATE
+> Task :app:processDebugJavaRes UP-TO-DATE
+> Task :react-native-async-storage_async-storage:processDebugJavaRes NO-SOURCE
+> Task :react-native-camera-roll_camera-roll:processDebugJavaRes NO-SOURCE
+> Task :react-native-fs:processDebugJavaRes NO-SOURCE
+> Task :react-native-gesture-handler:processDebugJavaRes UP-TO-DATE
+> Task :react-native-image-picker:processDebugJavaRes NO-SOURCE
+> Task :react-native-linear-gradient:processDebugJavaRes NO-SOURCE
+> Task :react-native-live-audio-stream:processDebugJavaRes NO-SOURCE
+> Task :react-native-ml-kit_image-labeling:processDebugJavaRes NO-SOURCE
+> Task :react-native-ml-kit_text-recognition:processDebugJavaRes NO-SOURCE
+> Task :react-native-nitro-modules:processDebugJavaRes UP-TO-DATE
+> Task :react-native-quick-sqlite:processDebugJavaRes NO-SOURCE
+> Task :react-native-safe-area-context:processDebugJavaRes UP-TO-DATE
+> Task :react-native-screens:processDebugJavaRes UP-TO-DATE
+> Task :react-native-sound:processDebugJavaRes UP-TO-DATE
+> Task :runanywhere_core:processDebugJavaRes UP-TO-DATE
+> Task :runanywhere_llamacpp:processDebugJavaRes UP-TO-DATE
+> Task :runanywhere_onnx:processDebugJavaRes UP-TO-DATE
+> Task :app:mergeDebugJavaResource UP-TO-DATE
+> Task :app:checkDebugDuplicateClasses UP-TO-DATE
+> Task :app:mergeExtDexDebug UP-TO-DATE
+> Task :react-native-sound:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-screens:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :runanywhere_llamacpp:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :runanywhere_onnx:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :runanywhere_core:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-gesture-handler:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-nitro-modules:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-quick-sqlite:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-safe-area-context:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-async-storage_async-storage:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-camera-roll_camera-roll:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-ml-kit_image-labeling:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-ml-kit_text-recognition:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-fs:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-image-picker:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-linear-gradient:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-live-audio-stream:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :app:mergeProjectDexDebug UP-TO-DATE
+> Task :react-native-nitro-modules:configureCMakeDebug[arm64-v8a]
+> Task :app:mergeLibDexDebug UP-TO-DATE
+
+> Task :react-native-nitro-modules:buildCMakeDebug[arm64-v8a]
+C/C++: Hard link from 'C:\Users\Nishant\.gradle\caches\8.14.3\transforms\821ed4691798374e87941f1498513aad\transformed\react-android-0.83.1-debug\prefab\modules\reactnative\libs\android.arm64-v8a\libreactnative.so' to 'D:\hacka\react-native-starter-app-main\node_modules\react-native-nitro-modules\android\build\intermediates\cxx\Debug\691c5zw4\obj\arm64-v8a\libreactnative.so' failed. Doing a slower copy instead.
+C/C++: Hard link from 'C:\Users\Nishant\.gradle\caches\8.14.3\transforms\821ed4691798374e87941f1498513aad\transformed\react-android-0.83.1-debug\prefab\modules\reactnative\libs\android.arm64-v8a\libreactnative.so' to 'D:\hacka\react-native-starter-app-main\node_modules\react-native-nitro-modules\android\build\intermediates\cxx\Debug\691c5zw4\obj\arm64-v8a\libreactnative.so' failed. Doing a slower copy instead.
+
+> Task :react-native-nitro-modules:configureCMakeDebug[armeabi-v7a]
+
+> Task :react-native-nitro-modules:buildCMakeDebug[armeabi-v7a]
+C/C++: Hard link from 'C:\Users\Nishant\.gradle\caches\8.14.3\transforms\821ed4691798374e87941f1498513aad\transformed\react-android-0.83.1-debug\prefab\modules\reactnative\libs\android.armeabi-v7a\libreactnative.so' to 'D:\hacka\react-native-starter-app-main\node_modules\react-native-nitro-modules\android\build\intermediates\cxx\Debug\691c5zw4\obj\armeabi-v7a\libreactnative.so' failed. Doing a slower copy instead.
+C/C++: Hard link from 'C:\Users\Nishant\.gradle\caches\8.14.3\transforms\821ed4691798374e87941f1498513aad\transformed\react-android-0.83.1-debug\prefab\modules\reactnative\libs\android.armeabi-v7a\libreactnative.so' to 'D:\hacka\react-native-starter-app-main\node_modules\react-native-nitro-modules\android\build\intermediates\cxx\Debug\691c5zw4\obj\armeabi-v7a\libreactnative.so' failed. Doing a slower copy instead.
+
+> Task :react-native-nitro-modules:configureCMakeDebug[x86]
+
+> Task :react-native-nitro-modules:buildCMakeDebug[x86]
+C/C++: Hard link from 'C:\Users\Nishant\.gradle\caches\8.14.3\transforms\821ed4691798374e87941f1498513aad\transformed\react-android-0.83.1-debug\prefab\modules\reactnative\libs\android.x86\libreactnative.so' to 'D:\hacka\react-native-starter-app-main\node_modules\react-native-nitro-modules\android\build\intermediates\cxx\Debug\691c5zw4\obj\x86\libreactnative.so' failed. Doing a slower copy instead.
+C/C++: Hard link from 'C:\Users\Nishant\.gradle\caches\8.14.3\transforms\821ed4691798374e87941f1498513aad\transformed\react-android-0.83.1-debug\prefab\modules\reactnative\libs\android.x86\libreactnative.so' to 'D:\hacka\react-native-starter-app-main\node_modules\react-native-nitro-modules\android\build\intermediates\cxx\Debug\691c5zw4\obj\x86\libreactnative.so' failed. Doing a slower copy instead.
+
+> Task :react-native-nitro-modules:configureCMakeDebug[x86_64]
+
+> Task :react-native-nitro-modules:buildCMakeDebug[x86_64]
+C/C++: Hard link from 'C:\Users\Nishant\.gradle\caches\8.14.3\transforms\821ed4691798374e87941f1498513aad\transformed\react-android-0.83.1-debug\prefab\modules\reactnative\libs\android.x86_64\libreactnative.so' to 'D:\hacka\react-native-starter-app-main\node_modules\react-native-nitro-modules\android\build\intermediates\cxx\Debug\691c5zw4\obj\x86_64\libreactnative.so' failed. Doing a slower copy instead.
+C/C++: Hard link from 'C:\Users\Nishant\.gradle\caches\8.14.3\transforms\821ed4691798374e87941f1498513aad\transformed\react-android-0.83.1-debug\prefab\modules\reactnative\libs\android.x86_64\libreactnative.so' to 'D:\hacka\react-native-starter-app-main\node_modules\react-native-nitro-modules\android\build\intermediates\cxx\Debug\691c5zw4\obj\x86_64\libreactnative.so' failed. Doing a slower copy instead.
+
+> Task :react-native-nitro-modules:externalNativeBuildDebug
+> Task :react-native-nitro-modules:generateJsonModelDebug
+> Task :react-native-nitro-modules:prefabDebugConfigurePackage
+> Task :app:configureCMakeDebug[arm64-v8a]
+> Task :react-native-nitro-modules:prefabDebugPackage UP-TO-DATE
+
+> Task :app:buildCMakeDebug[arm64-v8a]
+C/C++: Hard link from 'C:\Users\Nishant\.gradle\caches\8.14.3\transforms\821ed4691798374e87941f1498513aad\transformed\react-android-0.83.1-debug\prefab\modules\reactnative\libs\android.arm64-v8a\libreactnative.so' to 'D:\hacka\react-native-starter-app-main\android\app\build\intermediates\cxx\Debug\s39651a3\obj\arm64-v8a\libreactnative.so' failed. Doing a slower copy instead.
+C/C++: Hard link from 'C:\Users\Nishant\.gradle\caches\8.14.3\transforms\821ed4691798374e87941f1498513aad\transformed\react-android-0.83.1-debug\prefab\modules\reactnative\libs\android.arm64-v8a\libreactnative.so' to 'D:\hacka\react-native-starter-app-main\android\app\build\intermediates\cxx\Debug\s39651a3\obj\arm64-v8a\libreactnative.so' failed. Doing a slower copy instead.
+
+> Task :app:configureCMakeDebug[armeabi-v7a]
+
+> Task :app:buildCMakeDebug[armeabi-v7a]
+C/C++: Hard link from 'C:\Users\Nishant\.gradle\caches\8.14.3\transforms\821ed4691798374e87941f1498513aad\transformed\react-android-0.83.1-debug\prefab\modules\reactnative\libs\android.armeabi-v7a\libreactnative.so' to 'D:\hacka\react-native-starter-app-main\android\app\build\intermediates\cxx\Debug\s39651a3\obj\armeabi-v7a\libreactnative.so' failed. Doing a slower copy instead.
+C/C++: Hard link from 'C:\Users\Nishant\.gradle\caches\8.14.3\transforms\821ed4691798374e87941f1498513aad\transformed\react-android-0.83.1-debug\prefab\modules\reactnative\libs\android.armeabi-v7a\libreactnative.so' to 'D:\hacka\react-native-starter-app-main\android\app\build\intermediates\cxx\Debug\s39651a3\obj\armeabi-v7a\libreactnative.so' failed. Doing a slower copy instead.
+
+> Task :app:configureCMakeDebug[x86]
+
+> Task :app:buildCMakeDebug[x86]
+C/C++: Hard link from 'C:\Users\Nishant\.gradle\caches\8.14.3\transforms\821ed4691798374e87941f1498513aad\transformed\react-android-0.83.1-debug\prefab\modules\reactnative\libs\android.x86\libreactnative.so' to 'D:\hacka\react-native-starter-app-main\android\app\build\intermediates\cxx\Debug\s39651a3\obj\x86\libreactnative.so' failed. Doing a slower copy instead.
+C/C++: Hard link from 'C:\Users\Nishant\.gradle\caches\8.14.3\transforms\821ed4691798374e87941f1498513aad\transformed\react-android-0.83.1-debug\prefab\modules\reactnative\libs\android.x86\libreactnative.so' to 'D:\hacka\react-native-starter-app-main\android\app\build\intermediates\cxx\Debug\s39651a3\obj\x86\libreactnative.so' failed. Doing a slower copy instead.
+
+> Task :app:configureCMakeDebug[x86_64]
+
+> Task :app:buildCMakeDebug[x86_64]
+C/C++: Hard link from 'C:\Users\Nishant\.gradle\caches\8.14.3\transforms\821ed4691798374e87941f1498513aad\transformed\react-android-0.83.1-debug\prefab\modules\reactnative\libs\android.x86_64\libreactnative.so' to 'D:\hacka\react-native-starter-app-main\android\app\build\intermediates\cxx\Debug\s39651a3\obj\x86_64\libreactnative.so' failed. Doing a slower copy instead.
+C/C++: Hard link from 'C:\Users\Nishant\.gradle\caches\8.14.3\transforms\821ed4691798374e87941f1498513aad\transformed\react-android-0.83.1-debug\prefab\modules\reactnative\libs\android.x86_64\libreactnative.so' to 'D:\hacka\react-native-starter-app-main\android\app\build\intermediates\cxx\Debug\s39651a3\obj\x86_64\libreactnative.so' failed. Doing a slower copy instead.
+
+> Task :app:mergeDebugJniLibFolders UP-TO-DATE
+> Task :react-native-async-storage_async-storage:mergeDebugJniLibFolders UP-TO-DATE
+> Task :react-native-async-storage_async-storage:mergeDebugNativeLibs NO-SOURCE
+> Task :react-native-async-storage_async-storage:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :react-native-camera-roll_camera-roll:mergeDebugJniLibFolders UP-TO-DATE
+> Task :react-native-camera-roll_camera-roll:mergeDebugNativeLibs NO-SOURCE
+> Task :react-native-camera-roll_camera-roll:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :react-native-fs:mergeDebugJniLibFolders UP-TO-DATE
+> Task :react-native-fs:mergeDebugNativeLibs NO-SOURCE
+> Task :react-native-fs:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :react-native-gesture-handler:configureCMakeDebug[arm64-v8a]
+> Task :react-native-gesture-handler:buildCMakeDebug[arm64-v8a]
+> Task :react-native-gesture-handler:configureCMakeDebug[armeabi-v7a]
+> Task :react-native-gesture-handler:buildCMakeDebug[armeabi-v7a]
+> Task :react-native-gesture-handler:configureCMakeDebug[x86]
+> Task :react-native-gesture-handler:buildCMakeDebug[x86]
+> Task :react-native-gesture-handler:configureCMakeDebug[x86_64]
+> Task :react-native-gesture-handler:buildCMakeDebug[x86_64]
+> Task :react-native-gesture-handler:mergeDebugJniLibFolders UP-TO-DATE
+> Task :react-native-gesture-handler:mergeDebugNativeLibs UP-TO-DATE
+> Task :react-native-gesture-handler:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :react-native-image-picker:mergeDebugJniLibFolders UP-TO-DATE
+> Task :react-native-image-picker:mergeDebugNativeLibs NO-SOURCE
+> Task :react-native-image-picker:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :react-native-linear-gradient:mergeDebugJniLibFolders UP-TO-DATE
+> Task :react-native-linear-gradient:mergeDebugNativeLibs NO-SOURCE
+> Task :react-native-linear-gradient:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :react-native-live-audio-stream:mergeDebugJniLibFolders UP-TO-DATE
+> Task :react-native-live-audio-stream:mergeDebugNativeLibs NO-SOURCE
+> Task :react-native-live-audio-stream:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :react-native-ml-kit_image-labeling:mergeDebugJniLibFolders UP-TO-DATE
+> Task :react-native-ml-kit_image-labeling:mergeDebugNativeLibs NO-SOURCE
+> Task :react-native-ml-kit_image-labeling:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :react-native-ml-kit_text-recognition:mergeDebugJniLibFolders UP-TO-DATE
+> Task :react-native-ml-kit_text-recognition:mergeDebugNativeLibs NO-SOURCE
+> Task :react-native-ml-kit_text-recognition:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :react-native-nitro-modules:mergeDebugJniLibFolders UP-TO-DATE
+> Task :react-native-nitro-modules:mergeDebugNativeLibs UP-TO-DATE
+> Task :react-native-nitro-modules:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :react-native-quick-sqlite:configureCMakeDebug[arm64-v8a]
+> Task :react-native-quick-sqlite:buildCMakeDebug[arm64-v8a]
+> Task :react-native-quick-sqlite:configureCMakeDebug[armeabi-v7a]
+> Task :react-native-quick-sqlite:buildCMakeDebug[armeabi-v7a]
+> Task :react-native-quick-sqlite:configureCMakeDebug[x86]
+> Task :react-native-quick-sqlite:buildCMakeDebug[x86]
+> Task :react-native-quick-sqlite:configureCMakeDebug[x86_64]
+> Task :react-native-quick-sqlite:buildCMakeDebug[x86_64]
+> Task :react-native-quick-sqlite:mergeDebugJniLibFolders UP-TO-DATE
+> Task :react-native-quick-sqlite:mergeDebugNativeLibs UP-TO-DATE
+> Task :react-native-quick-sqlite:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :react-native-safe-area-context:mergeDebugJniLibFolders UP-TO-DATE
+> Task :react-native-safe-area-context:mergeDebugNativeLibs NO-SOURCE
+> Task :react-native-safe-area-context:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :react-native-screens:configureCMakeDebug[arm64-v8a]
+> Task :react-native-screens:buildCMakeDebug[arm64-v8a]
+> Task :react-native-screens:configureCMakeDebug[armeabi-v7a]
+> Task :react-native-screens:buildCMakeDebug[armeabi-v7a]
+> Task :react-native-screens:configureCMakeDebug[x86]
+> Task :react-native-screens:buildCMakeDebug[x86]
+> Task :react-native-screens:configureCMakeDebug[x86_64]
+> Task :react-native-screens:buildCMakeDebug[x86_64]
+> Task :react-native-screens:mergeDebugJniLibFolders UP-TO-DATE
+> Task :react-native-screens:mergeDebugNativeLibs UP-TO-DATE
+> Task :react-native-screens:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :react-native-sound:mergeDebugJniLibFolders UP-TO-DATE
+> Task :react-native-sound:mergeDebugNativeLibs NO-SOURCE
+> Task :react-native-sound:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :runanywhere_core:configureCMakeDebug[arm64-v8a]
+> Task :runanywhere_core:buildCMakeDebug[arm64-v8a]
+> Task :runanywhere_core:configureCMakeDebug[x86_64]
+> Task :runanywhere_core:buildCMakeDebug[x86_64]
+> Task :runanywhere_core:mergeDebugJniLibFolders UP-TO-DATE
+> Task :runanywhere_core:mergeDebugNativeLibs UP-TO-DATE
+> Task :runanywhere_core:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :runanywhere_llamacpp:configureCMakeDebug[arm64-v8a]
+> Task :runanywhere_llamacpp:buildCMakeDebug[arm64-v8a]
+> Task :runanywhere_llamacpp:configureCMakeDebug[x86_64]
+> Task :runanywhere_llamacpp:buildCMakeDebug[x86_64]
+> Task :runanywhere_llamacpp:mergeDebugJniLibFolders UP-TO-DATE
+> Task :runanywhere_llamacpp:mergeDebugNativeLibs UP-TO-DATE
+> Task :runanywhere_llamacpp:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :runanywhere_onnx:configureCMakeDebug[arm64-v8a]
+> Task :runanywhere_onnx:buildCMakeDebug[arm64-v8a]
+> Task :runanywhere_onnx:configureCMakeDebug[x86_64]
+> Task :runanywhere_onnx:buildCMakeDebug[x86_64]
+> Task :runanywhere_onnx:mergeDebugJniLibFolders UP-TO-DATE
+> Task :runanywhere_onnx:mergeDebugNativeLibs UP-TO-DATE
+> Task :runanywhere_onnx:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :app:mergeDebugNativeLibs UP-TO-DATE
+> Task :app:stripDebugDebugSymbols UP-TO-DATE
+> Task :app:validateSigningDebug UP-TO-DATE
+> Task :app:writeDebugAppMetadata UP-TO-DATE
+> Task :app:writeDebugSigningConfigVersions UP-TO-DATE
+> Task :app:packageDebug UP-TO-DATE
+> Task :app:createDebugApkListingFileRedirect UP-TO-DATE
+> Task :app:assembleDebug UP-TO-DATE
+> Task :react-native-async-storage_async-storage:stripDebugDebugSymbols NO-SOURCE
+> Task :react-native-async-storage_async-storage:copyDebugJniLibsProjectAndLocalJars
+> Task :react-native-async-storage_async-storage:extractDebugAnnotations
+> Task :react-native-async-storage_async-storage:extractDeepLinksForAarDebug
+> Task :react-native-async-storage_async-storage:mergeDebugGeneratedProguardFiles
+> Task :react-native-async-storage_async-storage:mergeDebugConsumerProguardFiles
+> Task :react-native-async-storage_async-storage:prepareDebugArtProfile
+> Task :react-native-async-storage_async-storage:prepareLintJarForPublish
+> Task :react-native-camera-roll_camera-roll:stripDebugDebugSymbols NO-SOURCE
+> Task :react-native-camera-roll_camera-roll:copyDebugJniLibsProjectAndLocalJars
+> Task :react-native-camera-roll_camera-roll:extractDebugAnnotations
+> Task :react-native-camera-roll_camera-roll:extractDeepLinksForAarDebug
+> Task :react-native-camera-roll_camera-roll:mergeDebugGeneratedProguardFiles
+> Task :react-native-camera-roll_camera-roll:mergeDebugConsumerProguardFiles
+> Task :react-native-camera-roll_camera-roll:prepareDebugArtProfile
+> Task :react-native-camera-roll_camera-roll:prepareLintJarForPublish
+> Task :react-native-fs:stripDebugDebugSymbols NO-SOURCE
+> Task :react-native-fs:copyDebugJniLibsProjectAndLocalJars
+> Task :react-native-fs:extractDebugAnnotations
+> Task :react-native-fs:extractDeepLinksForAarDebug
+> Task :react-native-fs:mergeDebugGeneratedProguardFiles
+> Task :react-native-fs:mergeDebugConsumerProguardFiles
+> Task :react-native-fs:prepareDebugArtProfile
+> Task :react-native-fs:prepareLintJarForPublish
+> Task :react-native-camera-roll_camera-roll:mergeDebugJavaResource
+> Task :react-native-async-storage_async-storage:mergeDebugJavaResource
+> Task :react-native-fs:mergeDebugJavaResource
+> Task :react-native-async-storage_async-storage:syncDebugLibJars
+> Task :react-native-gesture-handler:stripDebugDebugSymbols
+> Task :react-native-async-storage_async-storage:bundleDebugAar
+> Task :react-native-async-storage_async-storage:assembleDebug
+> Task :react-native-camera-roll_camera-roll:syncDebugLibJars
+> Task :react-native-camera-roll_camera-roll:bundleDebugAar
+> Task :react-native-camera-roll_camera-roll:assembleDebug
+> Task :react-native-fs:syncDebugLibJars
+> Task :react-native-fs:bundleDebugAar
+> Task :react-native-fs:assembleDebug
+> Task :react-native-gesture-handler:copyDebugJniLibsProjectAndLocalJars
+> Task :react-native-gesture-handler:extractDebugAnnotations
+> Task :react-native-gesture-handler:extractDeepLinksForAarDebug
+> Task :react-native-gesture-handler:mergeDebugGeneratedProguardFiles
+> Task :react-native-gesture-handler:mergeDebugConsumerProguardFiles
+> Task :react-native-gesture-handler:prepareDebugArtProfile
+> Task :react-native-gesture-handler:prepareLintJarForPublish
+> Task :react-native-image-picker:stripDebugDebugSymbols NO-SOURCE
+> Task :react-native-image-picker:copyDebugJniLibsProjectAndLocalJars
+> Task :react-native-image-picker:extractDebugAnnotations
+> Task :react-native-image-picker:extractDeepLinksForAarDebug
+> Task :react-native-image-picker:mergeDebugGeneratedProguardFiles
+> Task :react-native-image-picker:mergeDebugConsumerProguardFiles
+> Task :react-native-image-picker:prepareDebugArtProfile
+> Task :react-native-image-picker:prepareLintJarForPublish
+> Task :react-native-linear-gradient:stripDebugDebugSymbols NO-SOURCE
+> Task :react-native-gesture-handler:mergeDebugJavaResource
+> Task :react-native-linear-gradient:copyDebugJniLibsProjectAndLocalJars
+> Task :react-native-image-picker:mergeDebugJavaResource
+> Task :react-native-gesture-handler:syncDebugLibJars
+> Task :react-native-gesture-handler:bundleDebugAar
+> Task :react-native-gesture-handler:assembleDebug
+> Task :react-native-image-picker:syncDebugLibJars
+> Task :react-native-image-picker:bundleDebugAar
+> Task :react-native-image-picker:assembleDebug
+> Task :react-native-linear-gradient:extractDebugAnnotations
+> Task :react-native-linear-gradient:extractDeepLinksForAarDebug
+> Task :react-native-linear-gradient:mergeDebugGeneratedProguardFiles
+> Task :react-native-linear-gradient:mergeDebugConsumerProguardFiles
+> Task :react-native-linear-gradient:prepareDebugArtProfile
+> Task :react-native-linear-gradient:prepareLintJarForPublish
+> Task :react-native-live-audio-stream:stripDebugDebugSymbols NO-SOURCE
+> Task :react-native-linear-gradient:mergeDebugJavaResource
+> Task :react-native-live-audio-stream:copyDebugJniLibsProjectAndLocalJars
+> Task :react-native-linear-gradient:syncDebugLibJars
+> Task :react-native-linear-gradient:bundleDebugAar
+> Task :react-native-linear-gradient:assembleDebug
+> Task :react-native-live-audio-stream:extractDebugAnnotations
+> Task :react-native-live-audio-stream:extractDeepLinksForAarDebug
+> Task :react-native-live-audio-stream:mergeDebugGeneratedProguardFiles
+> Task :react-native-live-audio-stream:mergeDebugConsumerProguardFiles
+> Task :react-native-live-audio-stream:prepareDebugArtProfile
+> Task :react-native-live-audio-stream:prepareLintJarForPublish
+> Task :react-native-ml-kit_image-labeling:stripDebugDebugSymbols NO-SOURCE
+> Task :react-native-live-audio-stream:mergeDebugJavaResource
+> Task :react-native-ml-kit_image-labeling:copyDebugJniLibsProjectAndLocalJars
+> Task :react-native-ml-kit_image-labeling:extractDebugAnnotations
+> Task :react-native-live-audio-stream:syncDebugLibJars
+> Task :react-native-live-audio-stream:bundleDebugAar
+> Task :react-native-live-audio-stream:assembleDebug
+> Task :react-native-ml-kit_image-labeling:extractDeepLinksForAarDebug
+> Task :react-native-ml-kit_image-labeling:mergeDebugGeneratedProguardFiles
+> Task :react-native-ml-kit_image-labeling:mergeDebugConsumerProguardFiles
+> Task :react-native-ml-kit_image-labeling:prepareDebugArtProfile
+> Task :react-native-ml-kit_image-labeling:prepareLintJarForPublish
+> Task :react-native-ml-kit_text-recognition:stripDebugDebugSymbols NO-SOURCE
+> Task :react-native-ml-kit_text-recognition:copyDebugJniLibsProjectAndLocalJars
+> Task :react-native-ml-kit_image-labeling:mergeDebugJavaResource
+> Task :react-native-ml-kit_text-recognition:extractDebugAnnotations
+> Task :react-native-ml-kit_image-labeling:syncDebugLibJars
+> Task :react-native-ml-kit_image-labeling:bundleDebugAar
+> Task :react-native-ml-kit_image-labeling:assembleDebug
+> Task :react-native-ml-kit_text-recognition:extractDeepLinksForAarDebug
+> Task :react-native-ml-kit_text-recognition:mergeDebugGeneratedProguardFiles
+> Task :react-native-ml-kit_text-recognition:mergeDebugConsumerProguardFiles
+> Task :react-native-ml-kit_text-recognition:prepareDebugArtProfile
+> Task :react-native-ml-kit_text-recognition:prepareLintJarForPublish
+> Task :react-native-ml-kit_text-recognition:mergeDebugJavaResource
+> Task :react-native-nitro-modules:extractDebugAnnotations
+> Task :react-native-ml-kit_text-recognition:syncDebugLibJars
+> Task :react-native-ml-kit_text-recognition:bundleDebugAar
+> Task :react-native-ml-kit_text-recognition:assembleDebug
+> Task :react-native-nitro-modules:extractDeepLinksForAarDebug
+> Task :react-native-nitro-modules:mergeDebugGeneratedProguardFiles
+> Task :react-native-nitro-modules:mergeDebugConsumerProguardFiles
+> Task :react-native-nitro-modules:prepareDebugArtProfile
+> Task :react-native-nitro-modules:prepareLintJarForPublish
+> Task :react-native-nitro-modules:mergeDebugJavaResource
+> Task :react-native-nitro-modules:stripDebugDebugSymbols
+> Task :react-native-quick-sqlite:extractDebugAnnotations
+> Task :react-native-nitro-modules:copyDebugJniLibsProjectAndLocalJars
+> Task :react-native-quick-sqlite:stripDebugDebugSymbols
+> Task :react-native-nitro-modules:syncDebugLibJars
+> Task :react-native-nitro-modules:bundleDebugAar
+> Task :react-native-nitro-modules:assembleDebug
+> Task :react-native-quick-sqlite:extractDeepLinksForAarDebug
+> Task :react-native-quick-sqlite:mergeDebugGeneratedProguardFiles
+> Task :react-native-quick-sqlite:mergeDebugConsumerProguardFiles
+> Task :react-native-quick-sqlite:prepareDebugArtProfile
+> Task :react-native-quick-sqlite:prepareLintJarForPublish
+> Task :react-native-safe-area-context:stripDebugDebugSymbols NO-SOURCE
+> Task :react-native-quick-sqlite:mergeDebugJavaResource
+> Task :react-native-safe-area-context:copyDebugJniLibsProjectAndLocalJars
+> Task :react-native-safe-area-context:extractDebugAnnotations
+> Task :react-native-quick-sqlite:syncDebugLibJars
+> Task :react-native-safe-area-context:extractDeepLinksForAarDebug
+> Task :react-native-safe-area-context:mergeDebugGeneratedProguardFiles
+> Task :react-native-safe-area-context:mergeDebugConsumerProguardFiles
+> Task :react-native-safe-area-context:prepareDebugArtProfile
+> Task :react-native-safe-area-context:prepareLintJarForPublish
+> Task :react-native-safe-area-context:mergeDebugJavaResource
+> Task :react-native-quick-sqlite:copyDebugJniLibsProjectAndLocalJars
+> Task :react-native-screens:extractDebugAnnotations
+> Task :react-native-screens:stripDebugDebugSymbols
+> Task :react-native-quick-sqlite:bundleDebugAar
+> Task :react-native-quick-sqlite:assembleDebug
+> Task :react-native-safe-area-context:syncDebugLibJars
+> Task :react-native-safe-area-context:bundleDebugAar
+> Task :react-native-safe-area-context:assembleDebug
+> Task :react-native-screens:extractDeepLinksForAarDebug
+> Task :react-native-screens:mergeDebugGeneratedProguardFiles
+> Task :react-native-screens:mergeDebugConsumerProguardFiles
+> Task :react-native-screens:prepareDebugArtProfile
+> Task :react-native-screens:copyDebugJniLibsProjectAndLocalJars
+> Task :react-native-screens:prepareLintJarForPublish
+> Task :react-native-sound:stripDebugDebugSymbols NO-SOURCE
+> Task :react-native-sound:copyDebugJniLibsProjectAndLocalJars
+> Task :react-native-screens:mergeDebugJavaResource
+> Task :react-native-sound:extractDebugAnnotations
+> Task :react-native-screens:syncDebugLibJars
+> Task :react-native-screens:bundleDebugAar
+> Task :react-native-screens:assembleDebug
+> Task :react-native-sound:extractDeepLinksForAarDebug
+> Task :react-native-sound:mergeDebugGeneratedProguardFiles
+> Task :react-native-sound:mergeDebugConsumerProguardFiles
+> Task :react-native-sound:prepareDebugArtProfile
+> Task :react-native-sound:prepareLintJarForPublish
+> Task :runanywhere_core:extractDebugAnnotations
+> Task :runanywhere_core:extractDeepLinksForAarDebug
+> Task :runanywhere_core:mergeDebugGeneratedProguardFiles
+> Task :runanywhere_core:mergeDebugConsumerProguardFiles
+> Task :runanywhere_core:prepareDebugArtProfile
+> Task :runanywhere_llamacpp:extractDebugAnnotations
+> Task :runanywhere_llamacpp:extractDeepLinksForAarDebug
+> Task :runanywhere_llamacpp:mergeDebugGeneratedProguardFiles
+> Task :runanywhere_llamacpp:mergeDebugConsumerProguardFiles
+> Task :runanywhere_llamacpp:prepareDebugArtProfile
+> Task :react-native-sound:mergeDebugJavaResource
+> Task :react-native-sound:syncDebugLibJars
+> Task :react-native-sound:bundleDebugAar
+> Task :react-native-sound:assembleDebug
+> Task :runanywhere_core:mergeDebugJavaResource
+> Task :runanywhere_core:syncDebugLibJars
+> Task :runanywhere_onnx:extractDebugAnnotations
+> Task :runanywhere_onnx:extractDeepLinksForAarDebug
+> Task :runanywhere_onnx:mergeDebugGeneratedProguardFiles
+> Task :runanywhere_onnx:mergeDebugConsumerProguardFiles
+> Task :runanywhere_onnx:prepareDebugArtProfile
+> Task :runanywhere_core:prepareLintJarForPublish
+> Task :runanywhere_llamacpp:mergeDebugJavaResource
+> Task :runanywhere_llamacpp:syncDebugLibJars
+> Task :runanywhere_onnx:mergeDebugJavaResource
+> Task :runanywhere_onnx:syncDebugLibJars
+> Task :runanywhere_onnx:prepareLintJarForPublish
+> Task :runanywhere_llamacpp:prepareLintJarForPublish
+> Task :runanywhere_core:stripDebugDebugSymbols
+> Task :runanywhere_llamacpp:stripDebugDebugSymbols
+> Task :runanywhere_core:copyDebugJniLibsProjectAndLocalJars
+> Task :runanywhere_llamacpp:copyDebugJniLibsProjectAndLocalJars
+> Task :runanywhere_onnx:stripDebugDebugSymbols
+> Task :runanywhere_core:bundleDebugAar
+> Task :runanywhere_core:assembleDebug
+> Task :runanywhere_llamacpp:bundleDebugAar
+> Task :runanywhere_llamacpp:assembleDebug
+> Task :runanywhere_onnx:copyDebugJniLibsProjectAndLocalJars
+> Task :runanywhere_onnx:bundleDebugAar
+> Task :runanywhere_onnx:assembleDebug
+
+[Incubating] Problems report is available at: file:///D:/hacka/react-native-starter-app-main/android/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.14.3/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 2m 52s
+656 actionable tasks: 234 executed, 422 up-to-date

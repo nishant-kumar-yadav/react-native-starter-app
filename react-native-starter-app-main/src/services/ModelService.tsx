@@ -39,6 +39,7 @@ interface ModelServiceState {
   downloadAndLoadTTS: () => Promise<void>;
   downloadAndLoadAllModels: () => Promise<void>;
   unloadAllModels: () => Promise<void>;
+  unloadTTSModel: () => Promise<void>;
 }
 
 const ModelServiceContext = createContext<ModelServiceState | null>(null);
@@ -211,6 +212,17 @@ export const ModelServiceProvider: React.FC<ModelServiceProviderProps> = ({ chil
     }
   }, []);
 
+  // Unload specifically the TTS model to save RAM
+  const unloadTTSModel = useCallback(async () => {
+    try {
+      await RunAnywhere.unloadTTSModel();
+      setIsTTSLoaded(false);
+      console.log('TTS model explicitly unloaded to free RAM.');
+    } catch (error) {
+      console.error('Error unloading TTS model:', error);
+    }
+  }, []);
+
   const value: ModelServiceState = {
     isLLMDownloading,
     isSTTDownloading,
@@ -230,6 +242,7 @@ export const ModelServiceProvider: React.FC<ModelServiceProviderProps> = ({ chil
     downloadAndLoadTTS,
     downloadAndLoadAllModels,
     unloadAllModels,
+    unloadTTSModel,
   };
 
   return (

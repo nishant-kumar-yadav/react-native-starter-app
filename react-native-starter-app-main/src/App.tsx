@@ -20,7 +20,7 @@ import {
   SmartClipboardScreen,
   PointAndSpeakScreen,
 } from './screens';
-import { setupDatabase } from './Database';
+import { setupDatabase, closeDatabase } from './Database';
 import { RootStackParamList } from './navigation/types';
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -49,6 +49,10 @@ const App: React.FC = () => {
     };
 
     initializeApp();
+    // Return cleanup to securely close SQLite database and prevent memory leaks
+    return () => {
+      closeDatabase();
+    };
   }, []);
 
   return (

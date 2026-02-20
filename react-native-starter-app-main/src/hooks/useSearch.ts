@@ -10,8 +10,10 @@ import {
  */
 export const useSearch = (isDbReady: boolean) => {
     const [searchText, setSearchText] = useState('');
+    const [debouncedSearchText, setDebouncedSearchText] = useState('');
     const [searchResults, setSearchResults] = useState<DocumentRecord[]>([]);
     const [isSearching, setIsSearching] = useState(false);
+    const [isSearchPending, setIsSearchPending] = useState(false);
     const [searchHistory, setSearchHistory] = useState<SearchHistoryItem[]>([]);
 
     // Load history on mount
@@ -24,11 +26,16 @@ export const useSearch = (isDbReady: boolean) => {
     useEffect(() => {
         if (!isDbReady || !searchText.trim()) {
             setSearchResults([]);
+            setIsSearchPending(false);
             return;
         }
+
+        setIsSearchPending(true);
         const timer = setTimeout(() => {
             const results = searchDocuments(searchText);
             setSearchResults(results);
+            setDebouncedSearchText(searchText);
+            setIsSearchPending(false);
         }, 200);
         return () => clearTimeout(timer);
     }, [searchText, isDbReady]);
@@ -60,9 +67,9 @@ export const useSearch = (isDbReady: boolean) => {
     }, []);
 
     return {
-        searchText, setSearchText,
+        searchText, setSearchText, debouncedSearchText,
         searchResults,
-        isSearching, setIsSearching,
+        isSearching, setIsSearching, isSearchPending,
         searchHistory,
         handleSelectHistory, handleDeleteHistory, handleClearHistory,
     };

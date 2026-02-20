@@ -66,6 +66,9 @@ export const PointAndSpeakScreen: React.FC = () => {
             if (lastAudioPath.current) {
                 RNFS.unlink(lastAudioPath.current).catch(() => { });
             }
+
+            // LAZY UNLOADING: Free up RAM by unloading the TTS model when exiting this screen
+            modelService.unloadTTSModel();
         };
     }, []);
 
@@ -232,7 +235,9 @@ export const PointAndSpeakScreen: React.FC = () => {
         try {
             const result = await launchCamera({
                 mediaType: 'photo',
-                quality: 1,
+                quality: 0.5,
+                maxWidth: 1024,
+                maxHeight: 1024,
                 saveToPhotos: false,
             });
             if (result.assets?.[0]?.uri) {
@@ -247,7 +252,9 @@ export const PointAndSpeakScreen: React.FC = () => {
         try {
             const result = await launchImageLibrary({
                 mediaType: 'photo',
-                quality: 1,
+                quality: 0.5,
+                maxWidth: 1024,
+                maxHeight: 1024,
             });
             if (result.assets?.[0]?.uri) {
                 scanAndSpeak(result.assets[0].uri);

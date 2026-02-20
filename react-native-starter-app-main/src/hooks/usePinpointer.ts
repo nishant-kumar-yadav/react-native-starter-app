@@ -19,9 +19,9 @@ export const usePinpointer = () => {
 
     // --- Sub-hooks ---
     const {
-        searchText, setSearchText,
+        searchText, setSearchText, debouncedSearchText,
         searchResults,
-        isSearching, setIsSearching,
+        isSearching, setIsSearching, isSearchPending,
         searchHistory,
         handleSelectHistory, handleDeleteHistory, handleClearHistory,
     } = useSearch(true); // DB is initialized in App.tsx
@@ -34,7 +34,31 @@ export const usePinpointer = () => {
 
     // Voice: deliver transcription into the search bar
     const onTranscription = useCallback((text: string) => {
-        setSearchText(text);
+        let cleanedText = text.toLowerCase().trim();
+
+        // Strip common conversational voice prefixes
+        const prefixes = [
+            'search for my ', 'search for a ', 'search for ', 'search my ', 'search ',
+            'find my ', 'find a ', 'find ',
+            'look for my ', 'look for a ', 'look for ',
+            'where is my ', 'where is the ', 'where is a ', 'where is ',
+            'show me my ', 'show me the ', 'show me a ', 'show me ',
+        ];
+
+        for (const prefix of prefixes) {
+            if (cleanedText.startsWith(prefix)) {
+                cleanedText = cleanedText.substring(prefix.length).trim();
+                break;
+            }
+        }
+
+        // Remove trailing punctuation STT models often add (e.g. "Aadhar card.")
+        cleanedText = cleanedText.replace(/[.!?]$/, '').trim();
+
+        // If the user *just* said "search" and nothing else, fallback to raw text gracefully
+        const finalText = cleanedText || text.trim();
+
+        setSearchText(finalText);
         setIsSearching(true);
     }, [setSearchText, setIsSearching]);
 
@@ -56,7 +80,7 @@ export const usePinpointer = () => {
     // --- Cross-cutting: Manual scan ---
     const handleScan = useCallback(async () => {
         try {
-            const result = await launchImageLibrary({ mediaType: 'photo', quality: 1 });
+            const result = await launchImageLibrary({ mediaType: 'photo', quality: 0.5, maxWidth: 1024, maxHeight: 1024 });
             if (result.assets && result.assets[0]?.uri) {
                 const imageUri = result.assets[0].uri;
 
@@ -91,7 +115,7 @@ export const usePinpointer = () => {
 
     return {
         // Search
-        searchText, setSearchText, searchResults, isSearching, setIsSearching,
+        searchText, setSearchText, searchResults, isSearching, setIsSearching, isSearchPending,
         searchHistory, handleSelectHistory, handleDeleteHistory, handleClearHistory,
 
         // Image viewer

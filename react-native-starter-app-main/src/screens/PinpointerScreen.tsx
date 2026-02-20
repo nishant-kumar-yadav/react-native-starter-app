@@ -19,6 +19,8 @@ import {
     Image,
     ScrollView,
     useWindowDimensions,
+    Vibration,
+    ActivityIndicator,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { AppColors } from '../theme';
@@ -31,9 +33,9 @@ export const PinpointerScreen: React.FC = () => {
     const {
         searchText, setSearchText,
         searchResults,
-        isSearching, setIsSearching,
+        isSearching, setIsSearching, isSearchPending,
         selectedImage, setSelectedImage,
-        isRecording, isTranscribing,
+        isRecording, isTranscribing, isModelLoading,
         startListening, stopListening,
         handleScan, handleShare, handleEdit,
         handleQuickSync, handleDeepSync, handlePauseSync, handleResumeSync,
@@ -74,6 +76,7 @@ export const PinpointerScreen: React.FC = () => {
     };
 
     const openImage = async (uri: string) => {
+        Vibration.vibrate(10); // Light tick
         setSelectedImage(uri);
         await addRecentPhoto(uri);
     };
@@ -122,7 +125,11 @@ export const PinpointerScreen: React.FC = () => {
                     <TextInput
                         ref={searchInputRef}
                         style={styles.searchInput}
-                        placeholder={isTranscribing ? "Transcribing..." : "Search documents..."}
+                        placeholder={
+                            isModelLoading ? "Warming up AI..." :
+                                isTranscribing ? "Transcribing..." :
+                                    isRecording ? "Listening..." : "Search documents..."
+                        }
                         placeholderTextColor={AppColors.textMuted}
                         value={searchText}
                         onChangeText={setSearchText}
@@ -141,11 +148,13 @@ export const PinpointerScreen: React.FC = () => {
                     >
                         <LinearGradient
                             colors={
-                                isTranscribing
-                                    ? ['#888', '#555']
-                                    : isRecording
-                                        ? ['#FF416C', '#FF4B2B']
-                                        : [AppColors.accentCyan, AppColors.accentViolet]
+                                isModelLoading
+                                    ? ['#F59E0B', '#D97706'] // Orange loading state
+                                    : isTranscribing
+                                        ? ['#888', '#555']
+                                        : isRecording
+                                            ? ['#FF416C', '#FF4B2B']
+                                            : [AppColors.accentCyan, AppColors.accentViolet]
                             }
                             style={styles.micGradient}
                         >
@@ -237,30 +246,36 @@ export const PinpointerScreen: React.FC = () => {
                                     contentContainerStyle={styles.resultsList}
                                     showsVerticalScrollIndicator={false}
                                     ListEmptyComponent={
-                                        <View style={{ alignItems: 'center', paddingVertical: 24 }}>
-                                            <Text style={styles.subTitle}>No matches found.</Text>
-                                            <Text style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, marginTop: 6 }}>
-                                                Not in the last 300 photos?
-                                            </Text>
-                                            <TouchableOpacity
-                                                onPress={handleDeepSync}
-                                                style={{
-                                                    marginTop: 12,
-                                                    backgroundColor: 'rgba(138,43,226,0.3)',
-                                                    paddingHorizontal: 20,
-                                                    paddingVertical: 10,
-                                                    borderRadius: 20,
-                                                    borderWidth: 1,
-                                                    borderColor: 'rgba(138,43,226,0.6)',
-                                                }}
-                                                accessibilityLabel="Deep sync entire gallery"
-                                                accessibilityRole="button"
-                                            >
-                                                <Text style={{ color: '#FFF', fontSize: 13, fontWeight: '700' }}>
-                                                    🔎 Deep Sync entire gallery
+                                        isSearchPending ? (
+                                            <View style={{ alignItems: 'center', paddingVertical: 40 }}>
+                                                <ActivityIndicator size="large" color={AppColors.accentCyan} />
+                                            </View>
+                                        ) : (
+                                            <View style={{ alignItems: 'center', paddingVertical: 24 }}>
+                                                <Text style={styles.subTitle}>No matches found.</Text>
+                                                <Text style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, marginTop: 6 }}>
+                                                    Not in the last 300 photos?
                                                 </Text>
-                                            </TouchableOpacity>
-                                        </View>
+                                                <TouchableOpacity
+                                                    onPress={handleDeepSync}
+                                                    style={{
+                                                        marginTop: 12,
+                                                        backgroundColor: 'rgba(138,43,226,0.3)',
+                                                        paddingHorizontal: 20,
+                                                        paddingVertical: 10,
+                                                        borderRadius: 20,
+                                                        borderWidth: 1,
+                                                        borderColor: 'rgba(138,43,226,0.6)',
+                                                    }}
+                                                    accessibilityLabel="Deep sync entire gallery"
+                                                    accessibilityRole="button"
+                                                >
+                                                    <Text style={{ color: '#FFF', fontSize: 13, fontWeight: '700' }}>
+                                                        🔎 Deep Sync entire gallery
+                                                    </Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                        )
                                     }
                                 />
                             </Animated.View>

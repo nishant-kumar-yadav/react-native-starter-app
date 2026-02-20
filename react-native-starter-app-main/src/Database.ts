@@ -21,6 +21,18 @@ const getDb = (): ReturnType<typeof open> => {
   return _db;
 };
 
+export const closeDatabase = () => {
+  if (_db) {
+    try {
+      _db.close();
+      _db = null;
+      console.log('[DB] Database Connection Closed safely');
+    } catch (e) {
+      console.error('[DB] Failed to close database safely', e);
+    }
+  }
+};
+
 // ─── FTS5 availability flag ─────────────────────────────────────────────────
 let _ftsAvailable = false;
 
@@ -134,38 +146,52 @@ export const indexDocument = (
  * Search documents — uses FTS5 if available, falls back to LIKE.
  */
 export const searchDocuments = (query: string): DocumentRecord[] => {
+  const t0 = Date.now();
   try {
     const db = getDb();
     const trimmed = query.trim();
     if (!trimmed) return [];
 
+    let rows: any[] = [];
+
     // Try FTS5 first if available
     if (_ftsAvailable) {
       try {
-        const ftsResults = db.execute(
-          `SELECT d.id, d.content, d.filePath, d.category, d.detection_type
-           FROM fts_index f
-           JOIN document_index d ON d.id = f.rowid
-           WHERE fts_index MATCH ?
-           ORDER BY rank
-           LIMIT 50`,
-          [`"${trimmed}" OR ${trimmed}*`]
-        );
-        const rows = ftsResults?.rows?._array || (ftsResults?.rows ? Array.from(ftsResults.rows) : []);
-        if (rows.length > 0) return rows as DocumentRecord[];
-      } catch (_) {
-        // FTS5 match can fail on special characters — fall through to LIKE
+        // Strip out SQLite special characters that break MATCH queries
+        const safeQuery = trimmed.replace(/[^\w\s-]/g, '').trim();
+        if (safeQuery) {
+          const ftsResults = db.execute(
+            `SELECT d.id, d.content, d.filePath, d.category, d.detection_type
+             FROM fts_index f
+             JOIN document_index d ON d.id = f.rowid
+             WHERE fts_index MATCH ?
+             ORDER BY rank
+             LIMIT 50`,
+            [`"${safeQuery}"*`]
+          );
+          rows = ftsResults?.rows?._array || (ftsResults?.rows ? Array.from(ftsResults.rows) : []);
+          if (rows.length > 0) {
+            console.log(`[DB] FTS5 Search for "${safeQuery}" took ${Date.now() - t0}ms. Found ${rows.length} hits.`);
+            return rows as DocumentRecord[];
+          }
+        }
+      } catch (err) {
+        console.warn(`[DB] FTS5 matches failed for query "${trimmed}":`, err);
       }
     }
 
-    // Fallback: LIKE search (always works)
+    // Fallback: LIKE search
+    // Using COLLATE NOCASE is vastly faster than LOWER(content)
     const likeResults = db.execute(
-      `SELECT * FROM document_index WHERE LOWER(content) LIKE LOWER(?) LIMIT 50`,
+      `SELECT * FROM document_index WHERE content LIKE ? COLLATE NOCASE LIMIT 50`,
       [`%${trimmed}%`]
     );
-    return (likeResults?.rows?._array || (likeResults?.rows ? Array.from(likeResults.rows) : [])) as DocumentRecord[];
+    rows = likeResults?.rows?._array || (likeResults?.rows ? Array.from(likeResults.rows) : []);
+
+    console.log(`[DB] LIKE Search for "${trimmed}" took ${Date.now() - t0}ms. Found ${rows.length} hits.`);
+    return rows as DocumentRecord[];
   } catch (e) {
-    console.error('[DB] Search Failed:', e);
+    console.error(`[DB] Search Failed after ${Date.now() - t0}ms:`, e);
     return [];
   }
 };

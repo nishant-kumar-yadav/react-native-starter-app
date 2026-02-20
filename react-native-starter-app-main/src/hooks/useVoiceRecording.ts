@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from 'react';
-import { Platform, PermissionsAndroid, Alert, NativeModules } from 'react-native';
+import { Platform, PermissionsAndroid, Alert, NativeModules, Vibration } from 'react-native';
 import { RunAnywhere } from '@runanywhere/core';
 import { useModelService } from '../services/ModelService';
 import { AppLogger } from '../utils/AppLogger';
@@ -59,6 +59,7 @@ export const useVoiceRecording = (onTranscription: (text: string) => void) => {
             setIsTranscribing(false);
         } catch (error) {
             AppLogger.error('VoiceRecording', 'STT Error', error);
+            Vibration.vibrate([0, 30, 50, 30]); // Error double buzz
             setIsRecording(false);
             setIsTranscribing(false);
         }
@@ -78,6 +79,8 @@ export const useVoiceRecording = (onTranscription: (text: string) => void) => {
         setIsModelLoading(false);
 
         try {
+            Vibration.vibrate(40); // Solid thud when starting
+
             if (!NativeAudioModule) {
                 AppLogger.error('VoiceRecording', 'NativeAudioModule not found');
                 Alert.alert('Error', 'Audio module not available on this device.');
@@ -110,6 +113,7 @@ export const useVoiceRecording = (onTranscription: (text: string) => void) => {
             }, 100);
         } catch (error) {
             AppLogger.error('VoiceRecording', 'Recording start failed', error);
+            Vibration.vibrate([0, 30, 50, 30]);
             Alert.alert('Recording Error', `${error}`);
         }
     }, [isSTTDownloading, isSTTLoading, isSTTLoaded, downloadAndLoadSTT, stopListening]);

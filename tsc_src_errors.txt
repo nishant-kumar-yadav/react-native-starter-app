@@ -1,0 +1,23 @@
+node_modules/@runanywhere/core/src/Public/Extensions/RunAnywhere+Models.ts(213,54): error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18', 'node20', or 'nodenext'.
+node_modules/@runanywhere/core/src/Public/RunAnywhere.ts(347,48): error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18', 'node20', or 'nodenext'.
+src/screens/ChatScreen.tsx(71,38): error TS2339: Property 'performanceMetrics' does not exist on type 'LLMGenerationResult'.
+src/screens/ChatScreen.tsx(72,34): error TS2339: Property 'performanceMetrics' does not exist on type 'LLMGenerationResult'.
+src/screens/VoicePipelineScreen.tsx(60,12): error TS2678: Type '"sessionStarted"' is not comparable to type 'VoiceSessionEventType'.
+src/screens/VoicePipelineScreen.tsx(65,12): error TS2678: Type '"listeningStarted"' is not comparable to type 'VoiceSessionEventType'.
+src/screens/VoicePipelineScreen.tsx(70,12): error TS2678: Type '"speechDetected"' is not comparable to type 'VoiceSessionEventType'.
+src/screens/VoicePipelineScreen.tsx(79,12): error TS2678: Type '"transcribing"' is not comparable to type 'VoiceSessionEventType'.
+src/screens/VoicePipelineScreen.tsx(84,12): error TS2678: Type '"transcriptionComplete"' is not comparable to type 'VoiceSessionEventType'.
+src/screens/VoicePipelineScreen.tsx(85,19): error TS2339: Property 'data' does not exist on type 'VoiceSessionEvent'.
+src/screens/VoicePipelineScreen.tsx(88,25): error TS2339: Property 'data' does not exist on type 'VoiceSessionEvent'.
+src/screens/VoicePipelineScreen.tsx(97,12): error TS2678: Type '"generating"' is not comparable to type 'VoiceSessionEventType'.
+src/screens/VoicePipelineScreen.tsx(102,12): error TS2678: Type '"generationComplete"' is not comparable to type 'VoiceSessionEventType'.
+src/screens/VoicePipelineScreen.tsx(103,19): error TS2339: Property 'data' does not exist on type 'VoiceSessionEvent'.
+src/screens/VoicePipelineScreen.tsx(106,25): error TS2339: Property 'data' does not exist on type 'VoiceSessionEvent'.
+src/screens/VoicePipelineScreen.tsx(115,12): error TS2678: Type '"synthesizing"' is not comparable to type 'VoiceSessionEventType'.
+src/screens/VoicePipelineScreen.tsx(119,12): error TS2678: Type '"synthesisComplete"' is not comparable to type 'VoiceSessionEventType'.
+src/screens/VoicePipelineScreen.tsx(122,19): error TS2339: Property 'data' does not exist on type 'VoiceSessionEvent'.
+src/screens/VoicePipelineScreen.tsx(123,35): error TS2339: Property 'data' does not exist on type 'VoiceSessionEvent'.
+src/screens/VoicePipelineScreen.tsx(132,12): error TS2678: Type '"turnComplete"' is not comparable to type 'VoiceSessionEventType'.
+src/screens/VoicePipelineScreen.tsx(138,35): error TS2339: Property 'data' does not exist on type 'VoiceSessionEvent'.
+src/screens/VoicePipelineScreen.tsx(140,53): error TS2339: Property 'data' does not exist on type 'VoiceSessionEvent'.
+src/screens/VoicePipelineScreen.tsx(259,9): error TS2554: Expected 0-1 arguments, but got 2.

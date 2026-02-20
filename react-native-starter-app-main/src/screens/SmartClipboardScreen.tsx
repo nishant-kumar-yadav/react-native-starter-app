@@ -13,6 +13,7 @@ import {
     Alert,
     Vibration,
     Platform,
+    Modal,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
@@ -43,6 +44,7 @@ export const SmartClipboardScreen: React.FC = () => {
     const [clipHistory, setClipHistory] = useState<ClipboardItem[]>([]);
     const [showCopied, setShowCopied] = useState(false);
     const [showSaved, setShowSaved] = useState(false);
+    const [isImageModalVisible, setImageModalVisible] = useState(false);
 
     // Animations
     const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -152,7 +154,9 @@ export const SmartClipboardScreen: React.FC = () => {
         try {
             const result = await launchCamera({
                 mediaType: 'photo',
-                quality: 1,
+                quality: 0.5,
+                maxWidth: 1024,
+                maxHeight: 1024,
                 saveToPhotos: false,
             });
             if (result.assets?.[0]?.uri) {
@@ -167,7 +171,9 @@ export const SmartClipboardScreen: React.FC = () => {
         try {
             const result = await launchImageLibrary({
                 mediaType: 'photo',
-                quality: 1,
+                quality: 0.5,
+                maxWidth: 1024,
+                maxHeight: 1024,
             });
             if (result.assets?.[0]?.uri) {
                 processImage(result.assets[0].uri);
@@ -315,14 +321,16 @@ export const SmartClipboardScreen: React.FC = () => {
             {/* Image Preview */}
             {imageUri && (
                 <View style={styles.imagePreviewCard}>
-                    <Image source={{ uri: imageUri }} style={styles.imagePreview} resizeMode="cover" />
-                    <View style={styles.imageOverlay}>
-                        <View style={styles.detectionBadge}>
-                            <Text style={styles.detectionBadgeText}>
-                                {detectionType === 'TEXT' ? '✅ Text Detected' : '🏷️ Objects Detected'}
-                            </Text>
+                    <TouchableOpacity activeOpacity={0.8} onPress={() => setImageModalVisible(true)}>
+                        <Image source={{ uri: imageUri }} style={styles.imagePreview} resizeMode="cover" />
+                        <View style={styles.imageOverlay}>
+                            <View style={styles.detectionBadge}>
+                                <Text style={styles.detectionBadgeText}>
+                                    {detectionType === 'TEXT' ? '✅ Text Detected' : '🏷️ Objects Detected'}
+                                </Text>
+                            </View>
                         </View>
-                    </View>
+                    </TouchableOpacity>
                 </View>
             )}
 
@@ -470,6 +478,34 @@ export const SmartClipboardScreen: React.FC = () => {
             </ScrollView>
 
             {renderToast()}
+
+            {/* Full Screen Image Modal */}
+            <Modal
+                visible={isImageModalVisible}
+                transparent={true}
+                animationType="fade"
+                onRequestClose={() => setImageModalVisible(false)}
+            >
+                <View style={styles.modalBackground}>
+                    <TouchableOpacity
+                        style={styles.modalCloseArea}
+                        activeOpacity={1}
+                        onPress={() => setImageModalVisible(false)}
+                    >
+                        <Image
+                            source={{ uri: imageUri || undefined }}
+                            style={styles.modalImage}
+                            resizeMode="contain"
+                        />
+                        <TouchableOpacity
+                            style={styles.modalCloseButton}
+                            onPress={() => setImageModalVisible(false)}
+                        >
+                            <Text style={styles.modalCloseText}>✕</Text>
+                        </TouchableOpacity>
+                    </TouchableOpacity>
+                </View>
+            </Modal>
         </View>
     );
 };
@@ -819,5 +855,38 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: '600',
         color: '#FFFFFF',
+    },
+    // ─── Image Modal ────────────────────────────────────────
+    modalBackground: {
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalCloseArea: {
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalImage: {
+        width: '100%',
+        height: '80%',
+    },
+    modalCloseButton: {
+        position: 'absolute',
+        top: 50,
+        right: 20,
+        width: 44,
+        height: 44,
+        borderRadius: 22,
+        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalCloseText: {
+        color: '#FFF',
+        fontSize: 20,
+        fontWeight: 'bold',
     },
 });
